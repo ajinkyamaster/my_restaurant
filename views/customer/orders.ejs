@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Your Orders</title>
+</head>
+<body>
+
+<header class="navbar">
+    <h1 class="logo">My Restaurant</h1>
+    <nav>
+        <a href="/">Home</a>
+        <a href="/menu">Menu</a>
+        <a href="/bookTable">Book a Table</a>
+        <a href="/cart">Cart</a>
+        <a href="/orders">Orders</a>
+        <a href="/payments">My Payments</a>
+        <a href="#">About Us</a>
+    </nav>
+</header>
+
+<h2>Your Orders</h2>
+
+<% if (orders.length === 0) { %>
+    <p>No orders placed yet.</p>
+<% } else { %>
+    <% orders.forEach((order, index) => { %>
+        <h3>Order <%= index + 1 %></h3>
+        <ul>
+            <% order.items.forEach(item => { %>
+                <li>
+                    <%= item.item %> × <%= item.quantity %> — ₹<%= item.totalPrice %>
+                </li>
+            <% }) %>
+        </ul>
+        <hr>
+    <% }) %>
+<% } %>
+
+<a href="/menu">Back to Menu</a>
+
+</body>
+</html>
