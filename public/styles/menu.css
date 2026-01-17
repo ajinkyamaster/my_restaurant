@@ -1,0 +1,117 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #fafafa;
+    margin: 0;
+}
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 40px;
+    background-color: #222;
+}
+
+.logo {
+    color: #fff;
+}
+
+.navbar nav a {
+    color: #fff;
+    margin-left: 20px;
+    text-decoration: none;
+}
+
+.menu-section {
+    padding: 40px;
+    text-align: center;
+}
+
+.menu-section h2 {
+    margin-bottom: 30px;
+}
+
+.menu-list {
+    max-width: 600px;
+    margin: auto;
+}
+
+.menu-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    background-color: #fff;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.item-details {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+.item-name {
+    font-weight: bold;
+    font-size: 16px;
+    margin-bottom: 5px;
+}
+
+.item-price {
+    color: #e74c3c;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.cart-controls {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-decrease, .btn-increase {
+    width: 32px;
+    height: 32px;
+    border: 1px solid #ddd;
+    background-color: #f5f5f5;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 18px;
+    font-weight: bold;
+    color: #222;
+    transition: all 0.3s ease;
+}
+
+.btn-decrease:hover, .btn-increase:hover {
+    background-color: #e74c3c;
+    color: #fff;
+    border-color: #e74c3c;
+}
+
+.item-count {
+    width: 40px;
+    height: 32px;
+    text-align: center;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.btn-add-cart {
+    padding: 8px 16px;
+    background-color: #27ae60;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+
+.btn-add-cart:hover {
+    background-color: #229954;
+    transform: scale(1.05);
+}

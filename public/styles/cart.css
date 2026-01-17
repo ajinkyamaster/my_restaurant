@@ -1,0 +1,22 @@
+.cart-section {
+    padding: 40px;
+    text-align: center;
+}
+
+.cart-table {
+    margin: auto;
+    border-collapse: collapse;
+    width: 60%;
+}
+
+.cart-table th,
+.cart-table td {
+    border: 1px solid #ccc;
+    padding: 10px;
+}
+
+.btn-checkout {
+    margin-top: 20px;
+    padding: 10px 20px;
+    font-size: 16px;
+}
