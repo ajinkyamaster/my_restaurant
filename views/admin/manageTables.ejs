@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Manage Tables</title>
+    <link rel="stylesheet" href="/styles/admin-side-styles/manage-tables.css">
+</head>
+<body>
+
+<header class="admin-navbar">
+    <h1>Manage Tables</h1>
+    <a href="/admin/dashboard">Back to Dashboard</a>
+</header>
+
+<section class="content">
+
+    <table class="tables-table">
+        <thead>
+            <tr>
+                <th>Table Number</th>
+                <th>Capacity</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <% tables.forEach(table => { %>
+                <tr>
+                    <td><%= table.tableNumber %></td>
+                    <td><%= table.capacity %></td>
+                    <td class="<%= table.isVacant ? 'vacant' : 'occupied' %>">
+                        <%= table.isVacant ? "Vacant" : "Occupied" %>
+                    </td>
+                    <td>
+                        <!-- Edit -->
+                        <form method="GET" action="/admin/editTable/<%= table._id %>" style="display:inline;">
+                            <button type="submit" class="btn-edit">Edit</button>
+                        </form>
+
+                        <!-- Delete -->
+                        <form method="POST" action="/admin/deleteTable" style="display:inline;">
+                            <input type="hidden" name="id" value="<%= table._id %>">
+                            <button type="submit" class="btn-delete">Remove</button>
+                        </form>
+                    </td>
+                </tr>
+            <% }) %>
+        </tbody>
+    </table>
+
+    <div class="add-table-container">
+        <a href="/admin/addTable" class="btn-add">
+            ➕ Add New Table
+        </a>
+    </div>
+
+</section>
+
+</body>
+</html>

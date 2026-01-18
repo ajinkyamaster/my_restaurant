@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Edit Table</title>
+    <link rel="stylesheet" href="/styles/admin-side-styles/admin-tables-crud.css">
+</head>
+<body>
+
+<header class="admin-navbar">
+    <h1>Edit Table</h1>
+    <a href="/admin/tables">Back</a>
+</header>
+
+<section class="form-container">
+    <form method="POST" action="/admin/editTable">
+        <input type="hidden" name="id" value="<%= table._id %>">
+
+        <label>Table Number</label>
+        <input type="number" name="tableNumber" value="<%= table.tableNumber %>" required>
+
+        <label>Capacity</label>
+        <input type="number" name="capacity" value="<%= table.capacity %>" required>
+
+        <label>Status</label>
+        <select name="isVacant">
+            <option value="true" <%= table.isVacant ? "selected" : "" %>>Vacant</option>
+            <option value="false" <%= !table.isVacant ? "selected" : "" %>>Occupied</option>
+        </select>
+
+        <button type="submit">Update Table</button>
+    </form>
+</section>
+
+</body>
+</html>

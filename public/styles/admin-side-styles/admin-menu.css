@@ -1,0 +1,69 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+}
+
+.admin-navbar {
+    background-color: #1e272e;
+    color: white;
+    padding: 20px;
+}
+
+.admin-navbar a {
+    color: white;
+    margin-left: 20px;
+    text-decoration: none;
+}
+
+.content {
+    padding: 30px;
+}
+
+.menu-table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #fff;
+}
+
+.menu-table th,
+.menu-table td {
+    border: 1px solid #ddd;
+    padding: 12px;
+    text-align: center;
+}
+
+.menu-table th {
+    background-color: #0984e3;
+    color: white;
+}
+
+.btn-edit {
+    background-color: #fdcb6e;
+    border: none;
+    padding: 6px 10px;
+    cursor: pointer;
+    margin-right: 5px;
+}
+
+.btn-delete {
+    background-color: #d63031;
+    color: white;
+    border: none;
+    padding: 6px 10px;
+    cursor: pointer;
+}
+
+.add-menu-container {
+    margin-top: 20px;
+    text-align: right;
+}
+
+.btn-add {
+    padding: 10px 16px;
+    font-size: 15px;
+    background-color: #00b894;
+    color: white;
+    border: none;
+    cursor: pointer;
+}

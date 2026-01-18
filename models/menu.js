@@ -1,43 +1,47 @@
 const { ObjectId } = require("mongodb");
 const { getDb } = require("../data/database");
 
-const COLLECTION_NAME = "menu";
+const COLLECTION = "menu";
 
-/**
- * Create a new menu item
- * @param {Object} menuItem
- */
-const createMenuItem = async (menuItem) => {
-    const db = getDb();
-    const result = await db.collection(COLLECTION_NAME).insertOne(menuItem);
-    return result;
-};
-
-/**
- * Get all menu items
- */
 const getAllMenuItems = async () => {
     const db = getDb();
-    const menuItems = await db.collection(COLLECTION_NAME).find({}).toArray();
-    return menuItems;
+    return await db.collection(COLLECTION).find({}).toArray();
 };
 
-/**
- * Update a menu item by ID
- * @param {String} id
- * @param {Object} updatedData
- */
-const updateMenuItemById = async (id, updatedData) => {
+const getMenuItemById = async (id) => {
     const db = getDb();
-    const result = await db.collection(COLLECTION_NAME).updateOne(
+    return await db.collection(COLLECTION).findOne({
+        _id: new ObjectId(id)
+    });
+};
+
+const addMenuItem = async (name, price) => {
+    const db = getDb();
+    return await db.collection(COLLECTION).insertOne({
+        name,
+        price
+    });
+};
+
+const updateMenuItem = async (id, name, price) => {
+    const db = getDb();
+    return await db.collection(COLLECTION).updateOne(
         { _id: new ObjectId(id) },
-        { $set: updatedData }
+        { $set: { name, price } }
     );
-    return result;
+};
+
+const deleteMenuItem = async (id) => {
+    const db = getDb();
+    return await db.collection(COLLECTION).deleteOne({
+        _id: new ObjectId(id)
+    });
 };
 
 module.exports = {
-    createMenuItem,
     getAllMenuItems,
-    updateMenuItemById
+    getMenuItemById,
+    addMenuItem,
+    updateMenuItem,
+    deleteMenuItem
 };

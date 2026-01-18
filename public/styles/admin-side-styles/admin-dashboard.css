@@ -1,0 +1,93 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f5f6fa;
+}
+
+/* Navbar */
+.admin-navbar {
+    background-color: #1e272e;
+    color: #fff;
+    padding: 16px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    margin: 0;
+}
+
+.admin-nav-links a {
+    color: #fff;
+    text-decoration: none;
+    margin-left: 20px;
+    font-size: 15px;
+}
+
+.admin-nav-links a:hover {
+    text-decoration: underline;
+}
+
+/* Dashboard body */
+.dashboard-container {
+    padding: 40px;
+}
+
+.welcome-text {
+    font-size: 26px;
+    margin-bottom: 30px;
+}
+
+.welcome-text span {
+    color: #0984e3;
+    font-weight: bold;
+}
+
+/* Cards */
+.dashboard-cards {
+    display: flex;
+    gap: 25px;
+    flex-wrap: wrap;
+}
+
+.dashboard-card {
+    background-color: #ffffff;
+    width: 240px;
+    padding: 25px;
+    border-radius: 8px;
+    text-decoration: none;
+    color: #2d3436;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.dashboard-card h3 {
+    margin-top: 0;
+    margin-bottom: 10px;
+}
+
+.dashboard-card p {
+    margin: 0;
+    color: #636e72;
+}
+
+.dashboard-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.15);
+}
+
+
+.btn-danger {
+    background-color: #d63031;
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.btn-danger:hover {
+    background-color: #b02324;
+}

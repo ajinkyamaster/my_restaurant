@@ -33,6 +33,12 @@
                 <button>Book a Table</button>
             </a>
         </div>
+        <% if (typeof table !== "undefined") { %>
+    <div class="end-session-link">
+        <a href="/endSession">Finished Dining? End Session</a>
+    </div>
+<% } %>
+
 
     </section>
 

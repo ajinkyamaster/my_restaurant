@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Add Table</title>
+    <link rel="stylesheet" href="/styles/admin-side-styles/admin-tables-crud.css">
+</head>
+<body>
+
+<header class="admin-navbar">
+    <h1>Add New Table</h1>
+    <a href="/admin/tables">Back</a>
+</header>
+
+<section class="form-container">
+    <form method="POST" action="/admin/addTable">
+        <label>Table Number</label>
+        <input type="number" name="tableNumber" required>
+
+        <label>Capacity</label>
+        <input type="number" name="capacity" required>
+
+        <button type="submit">Add Table</button>
+    </form>
+</section>
+
+</body>
+</html>

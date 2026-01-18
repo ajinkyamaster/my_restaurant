@@ -1,0 +1,44 @@
+body {
+    font-family: Arial, sans-serif;
+    background: #f4f4f4;
+    margin: 0;
+}
+
+.admin-navbar {
+    background: #1e272e;
+    color: #fff;
+    padding: 20px;
+}
+
+.admin-navbar a {
+    color: #fff;
+    text-decoration: none;
+    margin-left: 20px;
+}
+
+.content {
+    padding: 30px;
+}
+
+.table-grid {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.table-card {
+    width: 200px;
+    padding: 20px;
+    border-radius: 8px;
+    background: white;
+    text-align: center;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.table-card.vacant {
+    border-left: 6px solid #00b894;
+}
+
+.table-card.occupied {
+    border-left: 6px solid #d63031;
+}

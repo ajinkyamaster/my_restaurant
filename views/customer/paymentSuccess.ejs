@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Payment Successful</title>
+    <link rel="stylesheet" href="/styles/payment-success.css">
+</head>
+<body>
+
+<header class="navbar">
+    <h1 class="logo">My Restaurant</h1>
+    <nav>
+        <a href="/menu">Menu</a>
+        <a href="/cart">Cart</a>
+    </nav>
+</header>
+
+<section class="success-section">
+    <h2>✅ Payment Successful</h2>
+
+    <p>
+        Thank you for your payment!  
+        Your table <strong><%= tableNumber %></strong> is still reserved for you.
+    </p>
+
+   <div class="actions">
+    <a href="/menu" class="btn-secondary">
+        ➕ Place New Order
+    </a>
+
+    <a href="/orders" class="btn-primary">
+        📋 View Orders
+    </a>
+</div>
+
+</section>
+
+</body>
+</html>

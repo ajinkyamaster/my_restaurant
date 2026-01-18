@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Thank You</title>
+    <link rel="stylesheet" href="/styles/end-session.css">
+</head>
+<body>
+
+<header class="navbar">
+    <h1 class="logo">My Restaurant</h1>
+    <nav>
+        <a href="/">Home</a>
+        <a href="/menu">Menu</a>
+    </nav>
+</header>
+
+<section class="end-session-section">
+    <h2>🙏 Thank You for Visiting!</h2>
+
+    <p>
+        We hope you enjoyed your meal at our restaurant.  
+        Your table <strong><%= tableNumber %></strong> is currently reserved for you.
+    </p>
+
+    <p class="note">
+        When you are ready to leave, please vacate the table so we can serve other guests.
+    </p>
+
+    <form method="POST" action="/vacateTable">
+            <button type="submit" class="btn-vacate">
+                😊 Enjoyed the Meal? Vacate the Table
+            </button>
+        </form>
+</section>
+
+</body>
+</html>

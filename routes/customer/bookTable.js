@@ -34,7 +34,7 @@ router.post("/bookTable", async (req, res) => {
         await tablesModel.markTableOccupied(vacantTable._id);
 
         // 5. Create session for the table
-        createTableSession(req, vacantTable.tableNumber);
+        createTableSession(req, vacantTable);
 
         // 5. Render confirmation
         res.render("customer/bookingConfirmed", {

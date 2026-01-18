@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Dashboard</title>
+<link rel="stylesheet" href="/styles/admin-side-styles/admin-dashboard.css">
+</head>
+<body>
+
+<header class="admin-navbar">
+    <h1 class="logo">Admin Panel</h1>
+
+    <nav class="admin-nav-links">
+        <a href="/admin/bookings">View All Bookings</a>
+        <a href="/admin/tables">Manage Tables</a>
+        <a href="/admin/about">Update About</a>
+        <a href="/admin/menu">Manage Menu</a>
+        <a href="/admin/logout">Logout</a>
+    </nav>
+</header>
+
+<section class="dashboard-container">
+    <h2 class="welcome-text">
+        Welcome <span><%= admin.username %></span>
+    </h2>
+
+    <div class="dashboard-cards">
+
+        <a href="/admin/bookings" class="dashboard-card">
+            <h3>📅 View All Bookings</h3>
+            <p>See today’s table bookings</p>
+        </a>
+
+        <a href="/admin/tables" class="dashboard-card">
+            <h3>🪑 Manage Tables</h3>
+            <p>Add, remove and manage tables</p>
+        </a>
+
+        <a href="/admin/menu" class="dashboard-card">
+            <h3>🍽️ Manage Menu</h3>
+            <p>Add or update menu items</p>
+        </a>
+
+        <a href="/admin/live-status" class="dashboard-card">
+            <h3>📊 Live Table Status</h3>
+            <p>View occupied & vacant tables</p>
+        </a>
+
+    </div>
+
+    <form method="POST" action="/admin/endOfDayReset" style="margin-top:30px;">
+    <button class="btn-danger">
+        🔁 End of Day Reset
+    </button>
+</form>
+
+</section>
+
+</body>
+</html>

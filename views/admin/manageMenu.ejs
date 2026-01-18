@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Manage Menu</title>
+    <link rel="stylesheet" href="/styles/admin-side-styles/admin-menu.css">
+</head>
+<body>
+
+<header class="admin-navbar">
+    <h1>Manage Menu</h1>
+    <a href="/admin/dashboard">Back to Dashboard</a>
+</header>
+
+<section class="content">
+
+    <table class="menu-table">
+        <thead>
+            <tr>
+                <th>Item Name</th>
+                <th>Price (₹)</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% menuItems.forEach(item => { %>
+                <tr>
+                    <td><%= item.name %></td>
+                    <td><%= item.price %></td>
+                   <td>
+    <form method="GET" action="/admin/editMenuItem/<%= item._id %>" style="display:inline;">
+        <button class="btn-edit">Edit</button>
+    </form>
+
+    <form method="POST" action="/admin/deleteMenuItem" style="display:inline;">
+        <input type="hidden" name="id" value="<%= item._id %>">
+        <button class="btn-delete">Remove</button>
+    </form>
+</td>
+
+                </tr>
+            <% }) %>
+        </tbody>
+    </table>
+
+   <div class="add-menu-container">
+    <a href="/admin/addNewMenuItem" class="btn-add">➕ Add New Menu Item</a>
+</div>
+
+
+</section>
+
+</body>
+</html>
