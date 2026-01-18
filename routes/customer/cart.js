@@ -48,7 +48,7 @@ router.post("/cart/add", (req, res) => {
 });
 
 // GET /payment
-router.get("/payment", (req, res) => {
+router.get("/payments", (req, res) => {
     if (!req.session.table || req.session.table.cart.length === 0) {
         return res.redirect("/menu");
     }
@@ -70,7 +70,49 @@ router.get("/payment", (req, res) => {
 
 // POST /checkout
 router.post("/checkout", (req, res) => {
-    res.redirect("/payment");
+    res.redirect("/payments");
 });
+
+// POST /makePayment                    need to be added
+router.post("/makePayment", (req, res) => {
+    // Payment processing logic would go here
+
+    // For now, we assume payment is successful
+     res.redirect("/paymentSuccess");       //for now
+});
+
+// GET /paymentSuccess
+router.get("/paymentSuccess", (req, res) => {
+    if (!req.session.table || req.session.table.cart.length === 0) {
+        return res.redirect("/");
+    }
+
+    const cart = req.session.table.cart;
+
+    const grandTotal = cart.reduce(
+        (sum, item) => sum + item.totalPrice,
+        0
+    );
+
+    const order = {
+        orderId: Date.now(),
+        items: cart,
+        grandTotal,
+        orderedAt: new Date()
+    };
+
+    // ✅ store order in session
+    req.session.table.orders.push(order);
+
+    // ✅ clear cart AFTER order is stored
+    req.session.table.cart = [];
+
+    res.render("customer/paymentSuccess", {
+        tableNumber: req.session.table.tableNumber,
+        order
+    });
+});
+
+
 
 module.exports = router;

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Live Table Status</title>
+<link rel="stylesheet" href="/styles/admin-side-styles/admin-tables.css">
+</head>
+<body>
+
+<header class="admin-navbar">
+    <h1>Live Table Status</h1>
+    <a href="/admin/dashboard">Back to Dashboard</a>
+</header>
+
+<section class="content">
+    <div class="table-grid">
+        <% tables.forEach(t => { %>
+            <div class="table-card <%= t.isVacant ? 'vacant' : 'occupied' %>">
+                <h3>Table <%= t.tableNumber %></h3>
+                <p>Capacity: <%= t.capacity %></p>
+                <p>Status: <strong><%= t.isVacant ? "Vacant" : "Occupied" %></strong></p>
+            </div>
+        <% }) %>
+    </div>
+</section>
+
+</body>
+</html>

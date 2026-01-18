@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Login</title>
+<link rel="stylesheet" href="/styles/admin-side-styles/admin-login.css">
+</head>
+<body>
+
+<header class="login-navbar">
+    <h1 class="logo">Admin Login</h1>
+    <nav>
+        <a href="/">Home</a>
+        <a href="/about">About Us</a>
+    </nav>
+</header>
+
+
+<section class="admin-section">
+    <h2>Login</h2>
+
+    <form method="POST" action="/admin/login">
+        <div>
+            <label>Username</label><br>
+            <input type="text" name="username" required>
+        </div>
+
+        <div style="margin-top:10px;">
+            <label>Password</label><br>
+            <input type="password" name="password" required>
+        </div>
+
+        <div style="margin-top:20px;">
+            <button type="submit">Login</button>
+        </div>
+    </form>
+</section>
+
+</body>
+</html>

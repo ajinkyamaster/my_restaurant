@@ -14,6 +14,13 @@ const createBooking = async (bookingData) => {
     });
 };
 
+// delete all bookings (end of day)
+const clearAllBookings = async () => {
+    const db = getDb();
+    return await db.collection(COLLECTION).deleteMany({});
+};
+
 module.exports = {
-    createBooking
+    createBooking,
+    clearAllBookings
 };
