@@ -1,8 +1,15 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add Menu Item</title>
-    <link rel="stylesheet" href="/styles/admin-side-styles/admin-menu.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/styles/base.css">
+<link rel="stylesheet" href="/styles/layout.css">
+<link rel="stylesheet" href="/styles/components.css">
+<link rel="stylesheet" href="/styles/admin-side-styles/admin-common.css">
+<link rel="stylesheet" href="/styles/admin-side-styles/admin-tables-crud.css">
+
 </head>
 <body>
 
@@ -11,17 +18,19 @@
     <a href="/admin/menu">Back</a>
 </header>
 
-<section class="content">
+<section class="form-container">
     <form method="POST" action="/admin/addNewMenuItem">
-        <label>Item Name</label><br>
-        <input type="text" name="name" required><br><br>
 
-        <label>Price</label><br>
-        <input type="number" name="price" required><br><br>
+        <label>Item Name</label>
+        <input type="text" name="name" required>
 
-        <button class="btn-add">Add Item</button>
+        <label>Price</label>
+        <input type="number" name="price" required>
+
+        <button type="submit">Add Item</button>
     </form>
 </section>
+
 
 </body>
 </html>

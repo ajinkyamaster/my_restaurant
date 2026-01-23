@@ -1,0 +1,82 @@
+/* PAGE BACKGROUND */
+body {
+    min-height: 100vh;
+    background:
+        linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.95)),
+        url("/images/hero-dark.jpg") center / cover no-repeat;
+}
+
+/* FORM CONTAINER */
+.form-container {
+    max-width: 420px;
+    margin: 100px auto 0;
+    padding: 36px 34px;
+
+    background-color: rgba(28, 28, 28, 0.55);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+
+    border: 1px solid var(--border-light);
+    border-radius: 18px;
+}
+
+/* FORM */
+.form-container form {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+/* LABEL */
+.form-container label {
+    font-size: 13px;
+    color: var(--text-muted);
+}
+
+/* INPUTS & SELECT */
+.form-container input,
+.form-container select {
+    width: 100%;
+    padding: 12px 14px;
+    font-size: 14px;
+
+    border-radius: 10px;
+    border: 1px solid var(--border-light);
+
+    background-color: rgba(0,0,0,0.45);
+    color: var(--text-main);
+}
+
+/* SELECT FIX */
+.form-container select option {
+    background-color: #111;
+    color: #fff;
+}
+
+/* BUTTON */
+.form-container button {
+    margin-top: 18px;
+    padding: 13px;
+    font-size: 15px;
+    border-radius: 30px;
+    border: none;
+    cursor: pointer;
+
+    background-color: var(--gold);
+    color: #000;
+
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.form-container button:hover {
+    background-color: var(--gold-soft);
+    transform: translateY(-2px);
+}
+
+/* MOBILE */
+@media (max-width: 480px) {
+    .form-container {
+        margin-top: 80px;
+        padding: 30px 24px;
+    }
+}

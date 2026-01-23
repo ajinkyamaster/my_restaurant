@@ -3,8 +3,13 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Booking Confirmed</title>
-    <link rel="stylesheet" href="/styles/bookingConfirmed.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Booking Confirmed</title>    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">    <link rel="stylesheet" href="/styles/common.css">
+    <link rel="stylesheet" href="/styles/base.css">
+<link rel="stylesheet" href="/styles/layout.css">
+<link rel="stylesheet" href="/styles/components.css">
+<link rel="stylesheet" href="/styles/pages/bookingConfirmed.css">
+
 </head>
 
 <body>
@@ -17,32 +22,34 @@
             <a href="/bookTable">Book a Table</a>
             <a href="/cart">Cart</a>
             <a href="/orders">Orders</a>
-            <a href="/payments">My Payments</a>
-            <a href="#">About Us</a>
+                <a href="/myPayments">My Payments</a>
+            <a href="/about">About Us</a>
         </nav>
     </header>
 
-    <section class="confirmation-section">
+   <section class="confirmation-section">
+    <div class="confirmation-card glass">
         <h2>🎉 Booking Confirmed!</h2>
 
         <div class="details">
-            <p><strong>Name:</strong>
-                <%= booking.customerName %>
-            </p>
-            <p><strong>Contact:</strong>
-                <%= booking.contact %>
-            </p>
-            <p><strong>Table Number:</strong>
-                <%= booking.tableNumber %>
-            </p>
+            <p><strong>Name:</strong> <%= booking.customerName %></p>
+            <p><strong>Table Number:</strong> <%= booking.tableNumber %></p>
             <p><strong>Date & Time:</strong>
-                <%= booking.dateTimeIn %>
+                <%= booking.bookingTime.toLocaleString() %>
             </p>
         </div>
 
-        <p class="note">Please arrive on time. We look forward to serving you!</p>
-    </section>
+        <p class="note">
+            Please arrive on time. We look forward to serving you!
+        </p>
+
+        <div class="actions">
+            <a href="/menu" class="btn btn-primary">View Menu</a>
+            <a href="/" class="btn btn-outline">Back to Home</a>
+        </div>
+    </div>
+</section>
+
 
 </body>
-
 </html>

@@ -1,73 +1,101 @@
+/* PAGE BACKGROUND */
 body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    background-color: #f5f6fa;
+    min-height: 100vh;
+    background:
+        linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.95)),
+        url("/images/hero-dark.jpg") center / cover no-repeat;
 }
 
-/* Header */
+/* TOP BAR */
 .login-navbar {
-    background-color: #2d3436;
-    color: #fff;
-    padding: 16px 40px;
+    height: 80px;
+    padding: 0 40px;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    background-color: rgba(0,0,0,0.85);
 }
 
 .login-navbar .logo {
-    margin: 0;
+    font-size: 1.7rem;
+    color: var(--gold);
 }
 
 .login-navbar nav a {
-    color: #fff;
-    margin-left: 20px;
+    font-size: 14px;
+    color: var(--text-muted);
     text-decoration: none;
-    font-size: 15px;
+    margin-left: 20px;
 }
 
 .login-navbar nav a:hover {
-    text-decoration: underline;
+    color: var(--gold);
 }
 
-/* Login section */
+/* ADMIN LOGIN CARD */
 .admin-section {
-    max-width: 400px;
-    margin: 60px auto;
-    background: #fff;
-    padding: 30px;
-    border-radius: 6px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-}
-
-.admin-section h2 {
-    margin-top: 0;
+    max-width: 420px;
+    margin: 120px auto 0;
+    padding: 38px 36px;
     text-align: center;
 }
 
-.admin-section label {
-    font-size: 14px;
+/* TITLE */
+.admin-section h2 {
+    font-size: 2rem;
+    margin-bottom: 28px;
+    color: var(--gold);
 }
 
+/* FORM */
+.admin-section form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+/* LABELS */
+.admin-section label {
+    font-size: 13px;
+    color: var(--text-muted);
+}
+
+/* INPUTS */
 .admin-section input {
     width: 100%;
-    padding: 8px;
-    margin-top: 6px;
-    margin-bottom: 15px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
+    padding: 12px 14px;
+    font-size: 14px;
+    border-radius: 10px;
+    border: 1px solid var(--border-light);
+    background-color: rgba(0,0,0,0.4);
+    color: var(--text-main);
 }
 
+/* BUTTON */
 .admin-section button {
-    width: 100%;
-    padding: 10px;
-    background-color: #0984e3;
+    margin-top: 18px;
+    padding: 12px;
+    font-size: 15px;
+    border-radius: 30px;
     border: none;
-    color: white;
-    font-size: 16px;
     cursor: pointer;
-    border-radius: 4px;
+    background-color: var(--gold);
+    color: #000;
+    transition: background-color 0.3s ease;
 }
 
 .admin-section button:hover {
-    background-color: #0771c7;
+    background-color: var(--gold-soft);
+}
+
+/* MOBILE */
+@media (max-width: 480px) {
+    .admin-section {
+        margin-top: 80px;
+        padding: 30px 24px;
+    }
+
+    .login-navbar {
+        padding: 0 20px;
+    }
 }

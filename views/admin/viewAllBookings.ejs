@@ -1,38 +1,59 @@
 <!DOCTYPE html>
 <html>
+
 <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>All Bookings</title>
-<link rel="stylesheet" href="/styles/admin-side-styles/admin-bookings.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@300;400;500;600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="/styles/base.css">
+    <link rel="stylesheet" href="/styles/layout.css">
+    <link rel="stylesheet" href="/styles/components.css">
+    <link rel="stylesheet" href="/styles/admin-side-styles/admin-common.css">
+    <link rel="stylesheet" href="/styles/admin-side-styles/admin-bookings.css">
+
 </head>
+
 <body>
 
-<header class="admin-navbar">
-    <h1>All Bookings</h1>
-    <a href="/admin/dashboard">Back to Dashboard</a>
-</header>
+    <header class="admin-navbar">
+        <h1>All Bookings</h1>
+        <a href="/admin/dashboard">Back to Dashboard</a>
+    </header>
 
-<section class="content">
-    <table>
-        <thead>
-            <tr>
-                <th>Customer Name</th>
-                <th>Table Number</th>
-                <th>Capacity</th>
-                <th>Booking Time</th>
-            </tr>
-        </thead>
-        <tbody>
-            <% bookings.forEach(b => { %>
-                <tr>
-                    <td><%= b.customerName %></td>
-                    <td><%= b.tableNumber %></td>
-                    <td><%= b.requestedCapacity %></td>
-                    <td><%= new Date(b.dateTimeIn).toLocaleString() %></td>
-                </tr>
-            <% }) %>
-        </tbody>
-    </table>
-</section>
+    <section class="content">
+        <% if (bookings.length===0) { %>
+            <div class="no-bookings">
+                <p>No Bookings Yet!</p>
+            </div>
+            <% } else { %>
+                <div class="bookings-grid">
+                    <% bookings.forEach(b=> { %>
+                        <div class="booking-card">
+                            <h3>Table <%= b.tableNumber %>
+                            </h3>
+                            <div class="booking-details">
+                                <p><strong>Customer Name:</strong>
+                                    <%= b.customerName %>
+                                </p>
+                                <p><strong>Booking Time:</strong>
+                                    <%= b.createdAt.toLocaleString() %>
+                                </p>
+                                <p>
+                                    <strong>Status:</strong>
+                                    <span class="status <%= b.status === 'Booking Active' ? 'active' : 'expired' %>">
+                                        <%= b.status %>
+                                    </span>
+                                </p>
+
+                            </div>
+                        </div>
+                        <% }) %>
+                </div>
+                <% } %>
+    </section>
 
 </body>
+
 </html>

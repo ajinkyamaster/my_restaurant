@@ -2,8 +2,14 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Payment</title>
-    <link rel="stylesheet" href="/styles/payment.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/styles/base.css">
+<link rel="stylesheet" href="/styles/layout.css">
+<link rel="stylesheet" href="/styles/components.css">
+<link rel="stylesheet" href="/styles/pages/payment.css">
+
 </head>
 
 <body>
@@ -11,15 +17,18 @@
     <header class="navbar">
         <h1 class="logo">My Restaurant</h1>
         <nav>
-            <a href="/">Home</a>
+           <a href="/">Home</a>
             <a href="/menu">Menu</a>
-            <a href="/cart">Cart</a>
-            <a href="/payment">My Payments</a>
             <a href="/bookTable">Book a Table</a>
+            <a href="/cart">Cart</a>
+            <a href="/orders">Orders</a>
+            <a href="/myPayments">My Payments</a>
+            <a href="/about">About Us</a>
         </nav>
     </header>
 
-    <section class="payment-section">
+   <section class="payment-section">
+    <div class="payment-card glass">
         <h2>Payment Summary</h2>
 
         <p class="table-info">
@@ -27,8 +36,8 @@
         </p>
 
         <% if (cart.length === 0) { %>
-            <p>Your cart is empty.</p>
-            <a href="/menu">Go back to Menu</a>
+            <p class="empty-text">Your cart is empty.</p>
+            <a href="/menu" class="btn btn-outline">Go back to Menu</a>
         <% } else { %>
 
             <table class="payment-table">
@@ -61,7 +70,9 @@
             </form>
 
         <% } %>
-    </section>
+    </div>
+</section>
+
 
 </body>
 </html>

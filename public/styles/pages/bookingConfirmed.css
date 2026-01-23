@@ -1,0 +1,76 @@
+/* PAGE BACKGROUND */
+.confirmation-section {
+    min-height: calc(100vh - 80px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 60px 20px;
+
+    background:
+        linear-gradient(rgba(0,0,0,0.65), rgba(0,0,0,0.9)),
+        url("/images/hero-dark.jpg") center / cover no-repeat;
+}
+
+/* CARD */
+.confirmation-card {
+    max-width: 520px;
+    width: 100%;
+    padding: 42px 38px;
+    text-align: center;
+}
+
+/* TITLE */
+.confirmation-card h2 {
+    font-size: 2.2rem;
+    color: var(--gold);
+    margin-bottom: 26px;
+}
+
+/* DETAILS */
+.details {
+    margin-bottom: 24px;
+}
+
+.details p {
+    font-size: 15px;
+    margin-bottom: 10px;
+    color: var(--text-main);
+}
+
+.details strong {
+    color: var(--gold);
+}
+
+/* NOTE */
+.note {
+    font-size: 14px;
+    color: var(--text-muted);
+    margin-bottom: 28px;
+}
+
+/* ACTION BUTTONS */
+.actions {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+}
+
+/* MOBILE */
+@media (max-width: 480px) {
+    .confirmation-card {
+        padding: 32px 24px;
+    }
+
+    .confirmation-card h2 {
+        font-size: 1.9rem;
+    }
+
+    .actions {
+        flex-direction: column;
+    }
+
+    .actions a {
+        width: 100%;
+        text-align: center;
+    }
+}

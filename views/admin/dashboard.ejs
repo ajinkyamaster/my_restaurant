@@ -2,8 +2,17 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard</title>
-<link rel="stylesheet" href="/styles/admin-side-styles/admin-dashboard.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/styles/base.css">
+<link rel="stylesheet" href="/styles/layout.css">
+<link rel="stylesheet" href="/styles/components.css">
+<link rel="stylesheet" href="/styles/admin-side-styles/admin-common.css"> <!-- NEW -->
+<link rel="stylesheet" href="/styles/admin-side-styles/admin-dashboard.css"> <!-- page-specific -->
+
+
+
 </head>
 <body>
 
@@ -11,7 +20,7 @@
     <h1 class="logo">Admin Panel</h1>
 
     <nav class="admin-nav-links">
-        <a href="/admin/bookings">View All Bookings</a>
+        <a href="/admin/viewAllBookings">View All Bookings</a>
         <a href="/admin/tables">Manage Tables</a>
         <a href="/admin/about">Update About</a>
         <a href="/admin/menu">Manage Menu</a>
@@ -24,37 +33,45 @@
         Welcome <span><%= admin.username %></span>
     </h2>
 
-    <div class="dashboard-cards">
+    <div class="dashboard-cards glass">
 
-        <a href="/admin/bookings" class="dashboard-card">
-            <h3>📅 View All Bookings</h3>
-            <p>See today’s table bookings</p>
-        </a>
+        <div class="dashboard-card">
+            <a href="/admin/viewAllBookings">
+                <h3>📅 View All Bookings</h3>
+                <p>See today’s table bookings</p>
+            </a>
+        </div>
 
-        <a href="/admin/tables" class="dashboard-card">
-            <h3>🪑 Manage Tables</h3>
-            <p>Add, remove and manage tables</p>
-        </a>
+        <div class="dashboard-card">
+            <a href="/admin/tables">
+                <h3>🪑 Manage Tables</h3>
+                <p>Add, remove and manage tables</p>
+            </a>
+        </div>
 
-        <a href="/admin/menu" class="dashboard-card">
-            <h3>🍽️ Manage Menu</h3>
-            <p>Add or update menu items</p>
-        </a>
+        <div class="dashboard-card">
+            <a href="/admin/menu">
+                <h3>🍽️ Manage Menu</h3>
+                <p>Add or update menu items</p>
+            </a>
+        </div>
 
-        <a href="/admin/live-status" class="dashboard-card">
-            <h3>📊 Live Table Status</h3>
-            <p>View occupied & vacant tables</p>
-        </a>
+        <div class="dashboard-card">
+            <a href="/admin/liveTableStatus">
+                <h3>📊 Live Table Status</h3>
+                <p>View occupied & vacant tables</p>
+            </a>
+        </div>
 
     </div>
 
-    <form method="POST" action="/admin/endOfDayReset" style="margin-top:30px;">
-    <button class="btn-danger">
-        🔁 End of Day Reset
-    </button>
-</form>
-
+    <form method="POST" action="/admin/endOfDayReset" class="reset-form">
+        <button class="btn-danger">
+            🔁 End of Day Reset
+        </button>
+    </form>
 </section>
+
 
 </body>
 </html>

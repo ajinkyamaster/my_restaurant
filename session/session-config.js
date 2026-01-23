@@ -15,13 +15,15 @@ const sessionMiddleware = session({
 /**
  * Create table session
  */
-const createTableSession = (req, table) => {
+const createTableSession = (req, table, customerName) => {
     req.session.table = {
         tableId: table._id,
         tableNumber: table.tableNumber,
         cart: [],
-        orders: []
+        customerName,
     };
+
+    
 };
 
 /**

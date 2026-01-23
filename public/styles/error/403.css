@@ -1,0 +1,71 @@
+/* PAGE BACKGROUND */
+body {
+    min-height: 100vh;
+    background:
+        linear-gradient(rgba(0,0,0,0.75), rgba(0,0,0,0.95)),
+        url("/images/hero-dark.jpg") center / cover no-repeat;
+}
+
+/* ERROR SECTION */
+.error-section {
+    min-height: calc(100vh - 80px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 40px 20px;
+}
+
+/* ERROR CARD */
+.error-card {
+    max-width: 460px;
+    width: 100%;
+    padding: 42px 38px;
+    text-align: center;
+}
+
+/* ERROR CODE */
+.error-card h1 {
+    font-size: 5rem;
+    font-weight: 700;
+    color: var(--gold);
+    margin-bottom: 10px;
+}
+
+/* TITLE */
+.error-card h2 {
+    font-size: 1.6rem;
+    color: var(--text-main);
+    margin-bottom: 16px;
+}
+
+/* TEXT */
+.error-card p {
+    font-size: 14px;
+    color: var(--text-muted);
+    margin-bottom: 10px;
+    line-height: 1.5;
+}
+
+.error-card .hint {
+    font-size: 13px;
+    opacity: 0.8;
+}
+
+/* ACTION BUTTONS */
+.actions {
+    margin-top: 26px;
+    display: flex;
+    justify-content: center;
+    gap: 14px;
+}
+
+/* MOBILE */
+@media (max-width: 480px) {
+    .error-card {
+        padding: 34px 26px;
+    }
+
+    .error-card h1 {
+        font-size: 4.2rem;
+    }
+}
