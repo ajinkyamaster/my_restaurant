@@ -1,0 +1,81 @@
+/* PAGE BACKGROUND */
+.end-session-section {
+    min-height: calc(100vh - 80px);
+    padding: 80px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background:
+        linear-gradient(rgba(0,0,0,0.65), rgba(0,0,0,0.9)),
+        url("/images/hero-dark.jpg") center / cover no-repeat;
+}
+
+/* CARD */
+.end-session-card {
+    max-width: 520px;
+    width: 100%;
+    padding: 42px 38px;
+    text-align: center;
+}
+
+/* TITLE */
+.end-session-card h2 {
+    font-size: 2.2rem;
+    color: var(--gold);
+    margin-bottom: 18px;
+}
+
+/* TEXT */
+.end-session-card p {
+    font-size: 15px;
+    color: var(--text-muted);
+    margin-bottom: 12px;
+}
+
+.end-session-card strong {
+    color: var(--gold);
+}
+
+/* NOTE */
+.end-session-card .note {
+    margin-top: 16px;
+    font-size: 14px;
+    color: var(--text-muted);
+    opacity: 0.9;
+}
+
+/* VACATE BUTTON */
+.btn-vacate {
+    margin-top: 26px;
+    padding: 14px 30px;
+    border-radius: 30px;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+
+    background-color: #c0392b;
+    color: #fff;
+
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.btn-vacate:hover {
+    background-color: #e74c3c;
+    transform: translateY(-1px);
+}
+
+/* MOBILE */
+@media (max-width: 480px) {
+    .end-session-card {
+        padding: 32px 24px;
+    }
+
+    .end-session-card h2 {
+        font-size: 1.9rem;
+    }
+
+    .btn-vacate {
+        width: 100%;
+    }
+}

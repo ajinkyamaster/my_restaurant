@@ -1,93 +1,117 @@
+/* PAGE BACKGROUND */
 body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    background-color: #f5f6fa;
+    min-height: 100vh;
+    background:
+        linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.95)),
+        url("/images/hero-dark.jpg") center / cover no-repeat;
 }
 
-/* Navbar */
-.admin-navbar {
-    background-color: #1e272e;
-    color: #fff;
-    padding: 16px 40px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+/* HEADER HEIGHT ONLY */
+.navbar {
+    height: 80px;
 }
 
-.logo {
-    margin: 0;
-}
-
-.admin-nav-links a {
-    color: #fff;
-    text-decoration: none;
-    margin-left: 20px;
-    font-size: 15px;
-}
-
-.admin-nav-links a:hover {
-    text-decoration: underline;
-}
-
-/* Dashboard body */
+/* CONTAINER */
 .dashboard-container {
-    padding: 40px;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 60px 20px 100px;
+    text-align: center;
 }
 
+/* WELCOME TEXT */
 .welcome-text {
-    font-size: 26px;
-    margin-bottom: 30px;
+    font-size: 2.4rem;
+    margin-bottom: 40px;
+    color: var(--gold);
 }
 
 .welcome-text span {
-    color: #0984e3;
-    font-weight: bold;
+    color: var(--gold-soft);
 }
 
-/* Cards */
+/* CARDS WRAPPER */
 .dashboard-cards {
+    width:80rem;
     display: flex;
-    gap: 25px;
+    justify-content: center;
+    gap: 70px;
     flex-wrap: wrap;
+    padding: 40px;
 }
 
+/* CARD */
 .dashboard-card {
-    background-color: #ffffff;
+    background-color: black;
+    border-radius: 2rem;
     width: 240px;
-    padding: 25px;
-    border-radius: 8px;
-    text-decoration: none;
-    color: #2d3436;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
-    transition: transform 0.2s, box-shadow 0.2s;
-}
-
-.dashboard-card h3 {
-    margin-top: 0;
-    margin-bottom: 10px;
-}
-
-.dashboard-card p {
-    margin: 0;
-    color: #636e72;
+    padding: 28px 24px;
+    cursor: pointer;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
 
 .dashboard-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.15);
+    transform: translateY(-6px);
+    box-shadow: 0 14px 30px rgba(0,0,0,0.45);
 }
 
+/* LINK RESET */
+.dashboard-card a {
+    text-decoration: none;
+    color: inherit;
+}
 
+/* CARD TITLE */
+.dashboard-card h3 {
+    font-size: 1.3rem;
+    color: var(--gold);
+    margin-bottom: 10px;
+}
+
+/* CARD TEXT */
+.dashboard-card p {
+    font-size: 14px;
+    color: var(--text-muted);
+}
+
+/* RESET FORM */
+.reset-form {
+    margin-top: 40px;
+    display: flex;
+    justify-content: center;
+}
+
+/* RESET BUTTON — SAME AS LOGIN BUTTON STYLE */
 .btn-danger {
-    background-color: #d63031;
-    color: white;
-    padding: 12px 20px;
+    padding: 14px 38px;
+    font-size: 15px;
+    border-radius: 30px;
     border: none;
-    font-size: 16px;
     cursor: pointer;
-    border-radius: 4px;
+    background-color: var(--gold);
+    color: #000;
+    transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
 .btn-danger:hover {
-    background-color: #b02324;
+    background-color: var(--gold-soft);
+    transform: translateY(-2px);
+}
+
+/* MOBILE */
+@media (max-width: 768px) {
+    .dashboard-cards {
+        padding: 30px 20px;
+    }
+
+    .dashboard-card {
+        width: 100%;
+        max-width: 340px;
+    }
+}
+
+@media (max-width: 480px) {
+    .welcome-text {
+        font-size: 2rem;
+    }
 }

@@ -1,0 +1,107 @@
+/* PAGE BACKGROUND */
+.orders-section {
+    min-height: calc(100vh - 80px);
+    padding: 70px 20px 100px;
+    background:
+        linear-gradient(rgba(0,0,0,0.65), rgba(0,0,0,0.9)),
+        url("/images/hero-dark.jpg") center / cover no-repeat;
+}
+
+/* TITLE */
+.orders-section h2 {
+    text-align: center;
+    font-size: 2.4rem;
+    color: var(--gold);
+    margin-bottom: 40px;
+}
+
+/* EMPTY STATE */
+.orders-section > p {
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 15px;
+}
+
+/* ORDER CARD */
+.order-card {
+    max-width: 900px;
+    margin: 0 auto 28px;
+    padding: 26px 28px;
+}
+
+/* ORDER TIME */
+.order-card p strong {
+    color: var(--gold);
+}
+
+.order-card p {
+    font-size: 14px;
+    margin-bottom: 12px;
+}
+
+/* ITEMS */
+.order-card ul {
+    list-style: none;
+    margin: 14px 0 18px;
+}
+
+.order-card ul li {
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+    padding: 8px 0;
+    border-bottom: 1px dashed var(--border-light);
+}
+
+.order-card ul li:last-child {
+    border-bottom: none;
+}
+
+/* TOTAL */
+.order-card .total {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--gold);
+    text-align: right;
+    margin-top: 14px;
+}
+
+/* STATUS */
+.status {
+    margin-top: 10px;
+    font-size: 13px;
+    font-weight: 500;
+}
+
+/* STATUS COLORS */
+.status.placed strong {
+    color: #f1970f;
+}
+
+.status.accepted strong {
+    color: #2ecc71;
+}
+
+.status.preparing {
+    color: #3498db;
+}
+
+.status.completed {
+    color: #9b59b6;
+}
+
+/* MOBILE */
+@media (max-width: 700px) {
+    .order-card {
+        padding: 22px 20px;
+    }
+
+    .order-card ul li {
+        font-size: 13px;
+    }
+
+    .order-card .total {
+        text-align: left;
+        margin-top: 10px;
+    }
+}

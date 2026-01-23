@@ -3,8 +3,17 @@
 
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Menu</title>
-    <link rel="stylesheet" href="/styles/menu.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@300;400;500;600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="/styles/base.css">
+    <link rel="stylesheet" href="/styles/layout.css">
+    <link rel="stylesheet" href="/styles/components.css">
+    <link rel="stylesheet" href="/styles/pages/menu.css">
+
+    <script src="/scripts/menu-cart.js" defer></script>
 </head>
 
 <body>
@@ -17,82 +26,69 @@
             <a href="/bookTable">Book a Table</a>
             <a href="/cart">Cart</a>
             <a href="/orders">Orders</a>
-            <a href="/payments">My Payments</a>
-            <a href="#">About Us</a>
+            <a href="/myPayments">My Payments</a>
+            <a href="/about">About Us</a>
         </nav>
     </header>
 
     <section class="menu-section">
         <h2>Our Menu</h2>
 
-        <div class="menu-list">
-            <% menuItems.forEach((item, index)=> { %>
-                <div class="menu-item">
-                    <div class="item-details">
-                        <span class="item-name">
-                            <%= item.name %>
-                        </span>
-                        <span class="item-price">₹ <%= item.price %></span>
-                    </div>
-                    <div class="cart-controls">
-                        <button class="btn-decrease" onclick="decreaseCount('<%= index %>')">−</button>
-                        <input type="number" id="count-<%= index %>" class="item-count" value="0" min="0" readonly>
-                        <button class="btn-increase" onclick="increaseCount('<%= index %>')">+</button>
-                        <button class="btn-add-cart"
-                            onclick="addToCart(<%= index %>, '<%= item.name %>', <%= item.price %>)">Add to
-                            Cart</button>
-                    </div>
+        <% if (message) { %>
+            <div class="alert-warning glass">
+                <%= message %>
+            </div>
+            <% } %>
+
+
+                <div class="menu-list">
+                    <% menuItems.forEach((item, index)=> { %>
+                        <div class="menu-item">
+
+                            <!-- LEFT: IMAGE -->
+                            <div class="menu-item-image">
+                                <img src="/images/<%= item.name.toLowerCase().replace(/\s+/g, '-')%>.jpg" alt="<%= item.name %>" onerror="this.src='/images/veg-biryani.jpg'">
+                            </div>
+
+                            <!-- CENTER: DETAILS -->
+                            <div class="item-details">
+                                <span class="item-name">
+                                    <%= item.name %>
+                                </span>
+                                <p class="item-desc">
+                                    Chef’s special preparation with premium ingredients.
+                                </p>
+                                <span class="item-price">₹ <%= item.price %></span>
+                            </div>
+
+                            <!-- RIGHT: ACTION -->
+                            <div class="cart-controls">
+                                <button class="btn-add-cart" onclick="addToCart('<%= item.name %>', <%= item.price %>)">
+                                    Add to Cart
+                                </button>
+                            </div>
+
+                        </div>
+
+                        <% }) %>
                 </div>
-                <% }) %>
-        </div>
+
+                <div id="menu-cart-preview" class="menu-cart-preview" style="display: none;">
+
+                    <h4>Your Cart</h4>
+
+                    <ul id="cart-preview-list" class="cart-preview-items">
+                        <!-- items will be appended here dynamically -->
+                    </ul>
+
+                    <a href="/cart" class="btn-go-cart">
+                        Go to Cart
+                    </a>
+                </div>
+
+
+
     </section>
-
-
-    <script>
-        function increaseCount(index) {
-            const countInput = document.getElementById('count-' + index);
-            countInput.value = parseInt(countInput.value) + 1;
-        }
-
-        function decreaseCount(index) {
-            const countInput = document.getElementById('count-' + index);
-            if (parseInt(countInput.value) > 0) {
-                countInput.value = parseInt(countInput.value) - 1;
-            }
-        }
-
-        async function addToCart(index, itemName, itemPrice) {
-            const countInput = document.getElementById('count-' + index);
-            const quantity = parseInt(countInput.value);
-
-            if (quantity === 0) {
-                alert("Please select a quantity");
-                return;
-            }
-
-            const response = await fetch("/cart/add", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    item: itemName,
-                    quantity: quantity,
-                    price: itemPrice
-                })
-            });
-
-            const data = await response.json();
-
-            if (response.ok) {
-                alert(`${quantity} x ${itemName} added to cart`);
-                countInput.value = 0;
-            } else {
-                alert(data.message || "Failed to add to cart");
-            }
-        }
-    </script>
-
 
 </body>
 

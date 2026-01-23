@@ -6,11 +6,8 @@ const createBooking = async (bookingData) => {
     const db = getDb();
     return await db.collection(COLLECTION).insertOne({
         customerName: bookingData.customerName,
-        contact: bookingData.contact,
-        dateTimeIn: bookingData.dateTimeIn,
         tableNumber: bookingData.tableNumber,
-        requestedCapacity: bookingData.requestedCapacity,
-        createdAt: new Date()
+        createdAt: bookingData.bookingTime
     });
 };
 
@@ -20,7 +17,13 @@ const clearAllBookings = async () => {
     return await db.collection(COLLECTION).deleteMany({});
 };
 
+const getAllBookings = async () => {
+    const db = getDb();
+    return await db.collection(COLLECTION).find().toArray();
+};
+
 module.exports = {
     createBooking,
-    clearAllBookings
+    clearAllBookings,
+    getAllBookings
 };

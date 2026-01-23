@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>My Payments</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/styles/base.css">
+<link rel="stylesheet" href="/styles/layout.css">
+<link rel="stylesheet" href="/styles/components.css">
+<link rel="stylesheet" href="/styles/pages/myPayments.css">
+
+</head>
+<body>
+
+<header class="navbar">
+    <h1 class="logo">My Restaurant</h1>
+    <nav>
+         <a href="/">Home</a>
+            <a href="/menu">Menu</a>
+            <a href="/bookTable">Book a Table</a>
+            <a href="/cart">Cart</a>
+            <a href="/orders">Orders</a>
+            <a href="/myPayments">My Payments</a>
+            <a href="/about">About Us</a>
+    </nav>
+</header>
+
+<section class="payments-section">
+    <h2>My Payments</h2>
+
+    <% if (!tableOrders || tableOrders.length === 0) { %>
+        <p class="empty-text">No payments found.</p>
+    <% } else { %>
+
+        <% tableOrders.forEach(order => { %>
+            <div class="payment-card glass">
+
+
+                <div class="payment-header">
+                    <span class="payment-id">
+                        Order ID: <%= order._id %>
+                    </span>
+
+                    <span class="payment-status success">
+                        Payment Successful
+                    </span>
+                </div>
+
+                <ul class="payment-items">
+                    <% order.items.forEach(item => { %>
+                        <li>
+                            <span>
+                                <%= item.item %> × <%= item.quantity %>
+                            </span>
+                            <span>
+                                ₹ <%= item.totalPrice %>
+                            </span>
+                        </li>
+                    <% }) %>
+                </ul>
+
+                <div class="payment-total">
+                    Grand Total: ₹ <%= order.grandTotal %>
+                </div>
+
+            </div>
+        <% }) %>
+
+    <% } %>
+</section>
+
+</body>
+</html>

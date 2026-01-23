@@ -1,0 +1,87 @@
+/* PAGE BACKGROUND */
+body {
+    min-height: 100vh;
+    background:
+        linear-gradient(rgba(0,0,0,0.75), rgba(0,0,0,0.95)),
+        url("/images/hero-dark.jpg") center / cover no-repeat;
+}
+
+/* ABOUT SECTION */
+.about-section {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 80px 20px 120px;
+
+    display: flex;
+    flex-direction: column;
+    gap: 50px;
+}
+
+/* MAIN CARD */
+.about-card {
+    padding: 40px 42px;
+    text-align: center;
+}
+
+.about-card h2 {
+    font-size: 2.4rem;
+    color: var(--gold);
+    margin-bottom: 22px;
+}
+
+.about-card p {
+    font-size: 16px;
+    line-height: 1.7;
+    color: var(--text-main);
+    margin-bottom: 14px;
+}
+
+.about-card strong {
+    color: var(--gold-soft);
+}
+
+/* FEATURES GRID */
+.about-features {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(240px, 1fr));
+    gap: 26px;
+}
+
+/* FEATURE CARD */
+.feature {
+    padding: 28px 26px;
+    text-align: center;
+}
+
+.feature h3 {
+    font-size: 1.4rem;
+    color: var(--gold);
+    margin-bottom: 12px;
+}
+
+.feature p {
+    font-size: 14px;
+    color: var(--text-muted);
+    line-height: 1.5;
+}
+
+/* RESPONSIVE */
+@media (max-width: 900px) {
+    .about-features {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 520px) {
+    .about-features {
+        grid-template-columns: 1fr;
+    }
+
+    .about-card {
+        padding: 32px 26px;
+    }
+
+    .about-card h2 {
+        font-size: 2rem;
+    }
+}

@@ -1,99 +1,149 @@
+/* PAGE BACKGROUND */
 body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    background-color: #f4f6f8;
+    min-height: 100vh;
+    background:
+        linear-gradient(rgba(0,0,0,0.75), rgba(0,0,0,0.95)),
+        url("/images/hero-dark.jpg") center / cover no-repeat;
 }
 
-/* Header */
-.admin-navbar {
-    background-color: #1e272e;
-    color: #fff;
-    padding: 18px 40px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.admin-navbar a {
-    color: #fff;
-    text-decoration: none;
-}
-
-/* Content */
+/* CONTENT WRAPPER */
 .content {
-    padding: 30px;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 60px 10px 100px;
 }
 
-/* Table */
+/* TABLE CONTAINER */
 .tables-table {
     width: 100%;
     border-collapse: collapse;
-    background-color: #fff;
+
+    background-color: rgba(28, 28, 28, 0.55);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+
+    border: 1px solid var(--border-light);
+    border-radius: 16px;
+    overflow: hidden;
 }
 
-.tables-table th,
-.tables-table td {
-    padding: 12px;
-    border: 1px solid #ddd;
-    text-align: center;
+/* TABLE HEADER */
+.tables-table thead {
+    background-color: rgba(0,0,0,0.55);
 }
 
 .tables-table th {
-    background-color: #0984e3;
-    color: #fff;
+    padding: 16px 14px;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--gold);
+    text-align: left;
+    border-bottom: 1px solid var(--border-light);
 }
 
-/* Status */
-.vacant {
-    color: #00b894;
-    font-weight: bold;
+/* TABLE ROWS */
+.tables-table td {
+    padding: 14px;
+    font-size: 14px;
+    color: var(--text-main);
+    border-bottom: 1px solid var(--border-light);
 }
 
-.occupied {
-    color: #d63031;
-    font-weight: bold;
+/* LAST ROW BORDER FIX */
+.tables-table tr:last-child td {
+    border-bottom: none;
 }
 
-/* Buttons */
-.btn-edit {
-    padding: 6px 12px;
-    background-color: #fdcb6e;
+/* STATUS */
+.tables-table td.vacant {
+    color: #2ecc71;
+    font-weight: 600;
+}
+
+.tables-table td.occupied {
+    color: #e74c3c;
+    font-weight: 600;
+}
+
+/* ACTION BUTTONS */
+.btn-edit,
+.btn-delete {
+    padding: 8px 14px;
+    font-size: 13px;
+    border-radius: 20px;
     border: none;
     cursor: pointer;
     margin-right: 6px;
 }
 
-.btn-delete {
-    padding: 6px 12px;
-    background-color: #d63031;
-    color: white;
-    border: none;
-    cursor: pointer;
+/* EDIT */
+.btn-edit {
+    background-color: var(--gold);
+    color: #000;
 }
 
 .btn-edit:hover {
-    background-color: #f1b93b;
+    background-color: var(--gold-soft);
+}
+
+/* DELETE */
+.btn-delete {
+    background-color: transparent;
+    border: 1px solid #e74c3c;
+    color: #e74c3c;
 }
 
 .btn-delete:hover {
-    background-color: #b02324;
+    background-color: #e74c3c;
+    color: #fff;
 }
 
-/* Add table */
+/* ADD TABLE BUTTON */
 .add-table-container {
-    margin-top: 20px;
-    text-align: right;
+    margin-top: 30px;
+    display: flex;
+    justify-content: center;
 }
 
 .btn-add {
-    padding: 10px 18px;
-    background-color: #00b894;
-    color: white;
-    text-decoration: none;
+    padding: 14px 36px;
+    border-radius: 30px;
     font-size: 15px;
-    border-radius: 4px;
+    font-weight: 600;
+    text-decoration: none;
+
+    background-color: var(--gold);
+    color: #000;
+
+    transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
 .btn-add:hover {
-    background-color: #019875;
+    background-color: var(--gold-soft);
+    transform: translateY(-2px);
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+    .tables-table {
+        font-size: 13px;
+    }
+
+    .tables-table th,
+    .tables-table td {
+        padding: 12px 10px;
+    }
+}
+
+@media (max-width: 520px) {
+    .tables-table {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+
+    .btn-add {
+        width: 100%;
+        text-align: center;
+    }
 }

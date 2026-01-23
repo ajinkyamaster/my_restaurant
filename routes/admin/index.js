@@ -9,9 +9,6 @@ const tablesRoutes = require("./tables");
 const menuRoutes = require("./menu");
 const resetRoutes = require("./reset");
 
-// admin end of day reset route
-router.use("/admin", resetRoutes);
-
 
 // apply protection to all /admin routes
 router.use("/admin", adminProtectMiddleware);
@@ -30,6 +27,9 @@ router.use('/admin', tablesRoutes);
 
 // admin menu management route
 router.use('/admin', menuRoutes);
+
+// admin end of day reset route
+router.use("/admin", resetRoutes);
 
 
 module.exports = router;

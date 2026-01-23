@@ -1,0 +1,97 @@
+/* PAGE BACKGROUND */
+body {
+    min-height: 100vh;
+    background:
+        linear-gradient(rgba(0,0,0,0.75), rgba(0,0,0,0.9)),
+        url("/images/hero-dark.jpg") center / cover no-repeat;
+}
+
+/* TOP BAR */
+.login-navbar {
+    height: 80px;
+    padding: 0 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: rgba(0,0,0,0.85);
+}
+
+.login-navbar .logo {
+    font-size: 1.6rem;
+    color: var(--gold);
+}
+
+.login-navbar nav a {
+    font-size: 14px;
+    color: var(--text-muted);
+    text-decoration: none;
+}
+
+.login-navbar nav a:hover {
+    color: var(--gold);
+}
+
+/* LOGIN CONTAINER */
+.login-container {
+    max-width: 420px;
+    margin: 120px auto 0;
+    padding: 36px 34px;
+    text-align: center;
+}
+
+/* TITLE */
+.login-container h2 {
+    font-size: 2rem;
+    margin-bottom: 26px;
+    color: var(--gold);
+}
+
+/* FORM */
+.login-container form {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+/* INPUTS */
+.login-container input {
+    padding: 12px 14px;
+    font-size: 14px;
+    border-radius: 10px;
+    border: 1px solid var(--border-light);
+    background-color: rgba(0,0,0,0.4);
+    color: var(--text-main);
+}
+
+.login-container input::placeholder {
+    color: var(--text-muted);
+}
+
+/* BUTTON */
+.login-container button {
+    margin-top: 10px;
+    padding: 12px;
+    font-size: 15px;
+    border-radius: 30px;
+    border: none;
+    cursor: pointer;
+    background-color: var(--gold);
+    color: #000;
+    transition: background-color 0.3s ease;
+}
+
+.login-container button:hover {
+    background-color: var(--gold-soft);
+}
+
+/* MOBILE */
+@media (max-width: 480px) {
+    .login-container {
+        margin-top: 80px;
+        padding: 30px 24px;
+    }
+
+    .login-navbar {
+        padding: 0 20px;
+    }
+}

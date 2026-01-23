@@ -16,5 +16,11 @@ router.post("/login", adminAuthMiddleware, (req, res) => {
     res.redirect("/admin/dashboard");
 });
 
+router.get("/logout", (req, res) => {
+    req.session.admin = false;
+    req.session.adminUser = null;
+    res.redirect("/admin/login");
+});
+
 
 module.exports = router;

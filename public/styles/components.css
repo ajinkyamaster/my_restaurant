@@ -1,0 +1,77 @@
+/* ================================
+   BUTTONS
+================================ */
+.btn {
+    padding: 12px 28px;
+    border-radius: 30px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: none;
+    outline: none;
+}
+
+/* Primary (Gold) */
+.btn-primary {
+    background-color: var(--gold);
+    color: #000;
+}
+
+.btn-primary:hover {
+    background-color: var(--gold-soft);
+}
+
+/* Outline (Gold) */
+.btn-outline {
+    background: transparent;
+    border: 1px solid var(--gold);
+    color: var(--gold);
+}
+
+.btn-outline:hover {
+    background-color: var(--gold);
+    color: #000;
+}
+
+/* ================================
+   CARDS
+================================ */
+.card {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-light);
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: var(--shadow-soft);
+}
+
+/* ================================
+   BADGES / STATUS LABELS
+================================ */
+.badge-success {
+    background-color: rgba(50, 200, 120, 0.15);
+    color: #3ad27a;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+/* ================================
+   UTILITY
+================================ */
+.text-center {
+    text-align: center;
+}
+
+.mt-20 {
+    margin-top: 20px;
+}
+
+.glass {
+    background-color: rgba(28, 28, 28, 0.55);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    border: 1px solid var(--border-light);
+    border-radius: 16px;
+}

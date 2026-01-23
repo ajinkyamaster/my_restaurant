@@ -2,37 +2,51 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Payment Successful</title>
-    <link rel="stylesheet" href="/styles/payment-success.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Successful</title>    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">    <link rel="stylesheet" href="/styles/common.css">
+    <link rel="stylesheet" href="/styles/base.css">
+<link rel="stylesheet" href="/styles/layout.css">
+<link rel="stylesheet" href="/styles/components.css">
+<link rel="stylesheet" href="/styles/pages/payment-success.css">
+
 </head>
 <body>
 
 <header class="navbar">
     <h1 class="logo">My Restaurant</h1>
+
     <nav>
-        <a href="/menu">Menu</a>
-        <a href="/cart">Cart</a>
+         <a href="/">Home</a>
+            <a href="/menu">Menu</a>
+            <a href="/bookTable">Book a Table</a>
+            <a href="/cart">Cart</a>
+            <a href="/orders">Orders</a>
+            <a href="/myPayments">My Payments</a>
+            <a href="/about">About Us</a>
     </nav>
 </header>
 
 <section class="success-section">
-    <h2>✅ Payment Successful</h2>
 
-    <p>
-        Thank you for your payment!  
-        Your table <strong><%= tableNumber %></strong> is still reserved for you.
-    </p>
+    <!-- 🎉 Hurray sticker -->
+    <div class="hurray-sticker">
+        🎉 Hurray!
+    </div>
 
-   <div class="actions">
-    <a href="/menu" class="btn-secondary">
-        ➕ Place New Order
-    </a>
+   <div class="success-card glass">
 
-    <a href="/orders" class="btn-primary">
-        📋 View Orders
-    </a>
-</div>
+        <h2>Payment Successful</h2>
 
+        <p class="lead">
+            Thank you for your payment!
+            Your table <strong><%= tableNumber %></strong> stays reserved for you.
+        </p>
+
+        <div class="actions">
+            <a href="/menu" class="btn btn-secondary">Place New Order</a>
+            <a href="/orders" class="btn btn-primary">View Orders</a>
+        </div>
+    </div>
 </section>
 
 </body>

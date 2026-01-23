@@ -1,0 +1,66 @@
+/* ================================
+   NAVBAR
+================================ */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 18px 40px;
+    background-color: var(--bg-secondary);
+    border-bottom: 1px solid var(--border-light);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.logo {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--gold);
+}
+
+.navbar nav {
+    display: flex;
+    gap: 22px;
+}
+
+.navbar nav a {
+    font-size: 14px;
+    color: var(--text-muted);
+    transition: color 0.3s ease;
+}
+
+.navbar nav a:hover {
+    color: var(--gold);
+}
+
+
+
+/* ================================
+   FOOTER (if used)
+================================ */
+.footer {
+    background-color: var(--bg-secondary);
+    border-top: 1px solid var(--border-light);
+    text-align: center;
+    padding: 20px;
+    color: var(--text-muted);
+    font-size: 13px;
+}
+
+/* ================================
+   GLOBAL RESPONSIVE LAYOUT
+================================ */
+@media (max-width: 768px) {
+    .navbar {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+        padding: 16px 20px;
+    }
+
+    .navbar nav {
+        flex-wrap: wrap;
+        gap: 14px;
+    }
+}

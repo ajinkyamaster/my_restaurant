@@ -3,12 +3,30 @@ const router = express.Router();
 
 const { getDb } = require("../../data/database");
 
-// GET /admin/viewAllBookings
-router.get("/viewAllBookings", async (req, res) => {
-    const db = getDb();
-    const bookings = await db.collection("bookings").find({}).toArray();
+const tablesModel = require("../../models/tables");
+const bookingsModel = require("../../models/bookings");
 
-    res.render("admin/viewAllBookings", { bookings });
+// GET /viewAllBookings
+router.get("/viewAllBookings", async (req, res) => {
+    const bookings = await bookingsModel.getAllBookings();
+
+    const bookingsWithStatus = await Promise.all(
+        bookings.map(async (b) => {
+            const vacantTable = await tablesModel.getTableByTableNumber(b.tableNumber);
+
+            return {
+                ...b,
+                status: vacantTable
+                    ? "Booking Expired"
+                    : "Booking Active"
+            };
+        })
+    );
+
+    res.render("admin/viewAllBookings", {
+        bookings: bookingsWithStatus
+    });
 });
+
 
 module.exports = router;

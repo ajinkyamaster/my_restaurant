@@ -1,0 +1,158 @@
+/* PAGE BACKGROUND */
+.cart-section {
+    min-height: calc(100vh - 80px);
+    padding: 70px 20px;
+    display: flex;
+    justify-content: center;
+
+    background:
+        linear-gradient(rgba(0,0,0,0.65), rgba(0,0,0,0.9)),
+        url("/images/hero-dark.jpg") center / cover no-repeat;
+}
+
+/* CARD */
+.cart-card {
+    width: 100%;
+    max-width: 900px;
+    padding: 36px 32px;
+}
+
+/* TITLE */
+.cart-card h2 {
+    font-size: 2.2rem;
+    color: var(--gold);
+    margin-bottom: 26px;
+    text-align: center;
+}
+
+/* EMPTY CART */
+.empty-text {
+    text-align: center;
+    color: var(--text-muted);
+    margin-bottom: 3rem;
+}
+
+#empty-text-container{
+    text-align: center;
+}
+
+/* TABLE */
+.cart-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 28px;
+}
+
+.cart-table th {
+    text-align: left;
+    font-size: 13px;
+    color: var(--text-muted);
+    padding: 12px 10px;
+    border-bottom: 1px solid var(--border-light);
+}
+
+.cart-table td {
+    padding: 14px 10px;
+    border-bottom: 1px solid var(--border-light);
+    font-size: 14px;
+}
+
+/* QUANTITY CONTROLS */
+.quantity-controls {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.quantity-value {
+    width: 46px;
+    text-align: center;
+    background: transparent;
+    border: 1px solid var(--border-light);
+    color: var(--text-main);
+    border-radius: 6px;
+    padding: 4px;
+}
+
+/* +/- BUTTONS */
+.btn-increase,
+.btn-decrease {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    border: 1px solid var(--gold);
+    background: transparent;
+    color: var(--gold);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-increase:hover,
+.btn-decrease:hover {
+    background-color: var(--gold);
+    color: #000;
+}
+
+/* REMOVE */
+.btn-remove {
+    background: transparent;
+    border: none;
+    color: #ff6b6b;
+    font-size: 13px;
+    cursor: pointer;
+}
+
+.btn-remove:hover {
+    text-decoration: underline;
+}
+
+/* TOTAL */
+.cart-card h3 {
+    text-align: right;
+    font-size: 1.3rem;
+    margin-bottom: 24px;
+    color: var(--text-main);
+}
+
+#grand-total {
+    color: var(--gold);
+}
+
+/* CHECKOUT */
+.btn-checkout {
+    display: block;
+    margin-left: auto;
+    padding: 12px 30px;
+    border-radius: 30px;
+    background-color: var(--gold);
+    color: #000;
+    border: none;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.btn-checkout:hover {
+    background-color: var(--gold-soft);
+}
+
+/* MOBILE */
+@media (max-width: 700px) {
+    .cart-card {
+        padding: 28px 20px;
+    }
+
+    .cart-table th,
+    .cart-table td {
+        font-size: 13px;
+    }
+
+    .cart-card h3 {
+        text-align: center;
+    }
+
+    .btn-checkout {
+        width: 100%;
+        margin: 0 auto;
+    }
+}

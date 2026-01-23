@@ -41,11 +41,11 @@ const markTableOccupied = async (tableId) => {
 };
 
 // Get vacant table with required capacity
-const getVacantTableByCapacity = async (requiredCapacity) => {
+const getTableByTableNumber = async (tableNumber) => {
     const db = getDb();
     return await db.collection(COLLECTION).findOne({
         isVacant: true,
-        capacity: { $gte: Number(requiredCapacity) }
+        tableNumber: Number(tableNumber)
     });
 };
 
@@ -106,7 +106,7 @@ module.exports = {
     deleteTable,
     getVacantTable,
     markTableOccupied,
-    getVacantTableByCapacity,
+    getTableByTableNumber,
     markTableVacant,
 
     // new admin exports

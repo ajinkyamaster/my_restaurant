@@ -10,7 +10,7 @@ const adminProtectMiddleware = (req, res, next) => {
     }
 
     // block unauthorized access
-    return res.status(403).send("Access denied: Admins only");
+    return res.status(403).render("error/403");
 };
 
 module.exports = adminProtectMiddleware;

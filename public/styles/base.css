@@ -1,0 +1,64 @@
+/* ================================
+   CSS RESET
+================================ */
+*,
+*::before,
+*::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* ================================
+   DESIGN TOKENS (THEME)
+================================ */
+:root {
+    /* Backgrounds */
+    --bg-main: #0b0b0b;
+    --bg-secondary: #141414;
+    --bg-card: #1c1c1c;
+
+    /* Text */
+    --text-main: #f2f2f2;
+    --text-muted: #b3b3b3;
+
+    /* Accent */
+    --gold: #cba437;
+    --gold-soft: #e8c766;
+
+    /* Borders & shadows */
+    --border-light: rgba(255, 255, 255, 0.08);
+    --shadow-soft: 0 8px 25px rgba(0, 0, 0, 0.35);
+}
+
+/* ================================
+   BASE TYPOGRAPHY
+================================ */
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: var(--bg-main);
+    color: var(--text-main);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3 {
+    font-family: 'Playfair Display', serif;
+    letter-spacing: 0.5px;
+}
+
+p {
+    color: var(--text-muted);
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+img {
+    display: block;
+    max-width: 100%;
+}
