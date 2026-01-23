@@ -1,6 +1,6 @@
 const { getDb } = require("../data/database");
 
-const COLLECTION = "admin";
+const COLLECTION = "admins";
 
 const findAdminByUsername = async (username) => {
     const db = getDb();
