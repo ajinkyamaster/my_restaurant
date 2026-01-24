@@ -6,7 +6,12 @@ const adminAuthMiddleware = async (req, res, next) => {
 
         const admin = await adminModel.findAdminByUsername(username);
 
+        console.log("LOGIN ATTEMPT:", username, password);
+        console.log("ADMIN FOUND:", admin);
+
+
         if (!admin || admin.password !== password) {
+            console.log("Admin authentication failed for username:", username);
             return res.status(401).render("admin/login", {
                 error: "Invalid admin credentials"
             });
