@@ -11,11 +11,19 @@
 
     <script src="/scripts/manager-orders.js"></script>
 
+    <link rel="stylesheet" href="/styles/mobile-nav.css">
+    <script src="/scripts/mobile-nav.js" defer></script>
 </head>
 <body>
 
 <header class="navbar">
     <h1 class="logo">Manager Dashboard</h1>
+
+     <div class="hamburger">
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
 
     <nav>
         <a href="/manager/dashboard">Dashboard</a>
@@ -65,6 +73,15 @@
     <% } %>
 
 </section>
+
+    <div class="sidebar-overlay"></div>
+
+    <aside class="sidebar">
+        <h3>Manager Panel</h3>
+
+        <a href="/manager/dashboard">Dashboard</a>
+        <a href="/manager/logout">Logout</a>
+    </aside>
 
 </body>
 </html>

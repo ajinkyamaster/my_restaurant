@@ -10,12 +10,21 @@
 <link rel="stylesheet" href="/styles/admin-side-styles/admin-common.css">
 <link rel="stylesheet" href="/styles/admin-side-styles/admin-tables-crud.css">
 
+    <link rel="stylesheet" href="/styles/mobile-nav.css">
+    <script src="/scripts/mobile-nav.js" defer></script>
 </head>
 <body>
 
 <header class="admin-navbar">
     <h1>Edit Menu Item</h1>
-    <a href="/admin/menu">Back</a>
+
+     <div class="hamburger">
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+
+    <nav><a href="/admin/menu">Back</a></nav>
 </header>
 
 <section class="form-container">
@@ -32,6 +41,21 @@
     </form>
 </section>
 
+    <div class="sidebar-overlay"></div>
+
+    <aside class="sidebar">
+        <h3>Admin Panel</h3>
+
+        <a href="/admin/dashboard">Dashboard</a>
+        <a href="/admin/viewAllBookings">View All Bookings</a>
+        <a href="/admin/tables">Manage Tables</a>
+        <a href="/admin/menu">Manage Menu</a>
+        <a href="/admin/allManagers">View All Managers</a>
+        <a href="/admin/create-new-admin">Create New Admin</a>
+        <a href="/admin/create-new-manager">Create New Manager</a>
+        <a href="/admin/vacate-manager">Vacate Manager</a>
+        <a href="/admin/logout">Logout</a>
+    </aside>
 
 </body>
 </html>

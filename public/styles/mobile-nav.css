@@ -1,0 +1,115 @@
+/* ================================
+   HAMBURGER ICON (MOBILE ONLY)
+================================ */
+.hamburger {
+    display: none;
+    flex-direction: column;
+    margin: auto 0.4rem;
+    gap: 5px;
+    cursor: pointer;
+}
+
+.hamburger span {
+    width: 24px;
+    height: 2px;
+    background-color: var(--gold);
+    transition: all 0.3s ease;
+}
+
+/* ================================
+   SIDEBAR OVERLAY
+================================ */
+.sidebar-overlay {
+    position: fixed;
+    inset: 0;
+    background-color: rgba(0,0,0,0.6);
+    z-index: 999;
+    display: none;
+}
+
+/* ================================
+   SIDEBAR
+================================ */
+.sidebar {
+    position: fixed;
+    top: 0;
+    right: -320px;
+    width: 300px;
+    height: 100vh;
+
+    background-color: rgba(28, 28, 28, 0.55);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+
+    border-left: 1px solid var(--border-light);
+    padding: 30px 24px;
+
+    z-index: 1000;
+    transition: right 0.35s ease;
+}
+
+/* ACTIVE STATE */
+.sidebar.active {
+    right: 0;
+}
+
+.sidebar-overlay.active {
+    display: block;
+}
+
+/* ================================
+   SIDEBAR CONTENT
+================================ */
+.sidebar h3 {
+    color: var(--gold);
+    font-size: 1.6rem;
+    margin-bottom: 30px;
+}
+
+.sidebar a {
+    display: block;
+    text-decoration: none;
+    color: var(--text-main);
+    font-size: 15px;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--border-light);
+}
+
+.sidebar a:hover {
+    color: var(--gold);
+}
+
+/* ================================
+   MOBILE BREAKPOINT
+================================ */
+@media (max-width: 768px) {
+     .hamburger {
+        display: flex;
+
+    }
+
+    .navbar nav {
+        display: none;
+    }
+    .navbar {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+    }
+
+    /* ADMIN NAVBAR ADJUSTMENTS */
+    .admin-navbar .admin-nav-links {
+        display: none;
+    }
+    .admin-navbar nav {
+        display: none;
+    }
+    .login-navbar nav {
+        display: none;
+    }
+    .admin-navbar {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+    }
+}

@@ -10,11 +10,20 @@
 <link rel="stylesheet" href="/styles/components.css">
 <link rel="stylesheet" href="/styles/admin-side-styles/admin-login.css">
 
+    <link rel="stylesheet" href="/styles/mobile-nav.css">
+    <script src="/scripts/mobile-nav.js" defer></script>
 </head>
 <body>
 
 <header class="login-navbar">
     <h1 class="logo">Admin Login</h1>
+
+     <div class="hamburger">
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+
     <nav>
         <a href="/">Home</a>
         <a href="/about">About Us</a>
@@ -41,6 +50,14 @@
         </div>
     </form>
 </section>
+
+    <div class="sidebar-overlay"></div>
+
+    <aside class="sidebar">
+        <h3>Admin Panel</h3>
+        <a href="/">Home</a>
+        <a href="/about">About Us</a>
+    </aside>
 
 </body>
 </html>

@@ -10,12 +10,22 @@
 <link rel="stylesheet" href="/styles/pages/cart.css">
 
     <script src="/scripts/cart-quantity.js" defer></script>
+
+    <link rel="stylesheet" href="/styles/mobile-nav.css">
+    <script src="/scripts/mobile-nav.js" defer></script>
 </head>
 
 <body>
 
     <header class="navbar">
         <h1 class="logo">My Restaurant</h1>
+
+         <div class="hamburger">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+
         <nav>
             <a href="/">Home</a>
             <a href="/menu">Menu</a>
@@ -92,6 +102,20 @@
        <% } %>
     </div>
 </section>
+
+    <div class="sidebar-overlay"></div>
+
+    <aside class="sidebar">
+        <h3>My Restaurant</h3>
+
+        <a href="/">Home</a>
+        <a href="/menu">Menu</a>
+        <a href="/bookTable">Book a Table</a>
+        <a href="/cart">Cart</a>
+        <a href="/orders">Orders</a>
+        <a href="/myPayments">My Payments</a>
+        <a href="/about">About Us</a>
+    </aside>
 
 </body>
 

@@ -10,11 +10,20 @@
 <link rel="stylesheet" href="/styles/components.css">
 <link rel="stylesheet" href="/styles/admin-side-styles/admin-login.css">
 
+    <link rel="stylesheet" href="/styles/mobile-nav.css">
+    <script src="/scripts/mobile-nav.js" defer></script>
 </head>
 <body>
 
 <header class="login-navbar">
     <h1 class="logo">Vacate Manager</h1>
+
+     <div class="hamburger">
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+
     <nav>
         <a href="/admin/dashboard">Back to Dashboard</a>
     </nav>
@@ -38,6 +47,22 @@
         </div>
     </form>
 </section>
+
+    <div class="sidebar-overlay"></div>
+
+    <aside class="sidebar">
+        <h3>Admin Panel</h3>
+
+        <a href="/admin/dashboard">Dashboard</a>
+        <a href="/admin/viewAllBookings">View All Bookings</a>
+        <a href="/admin/tables">Manage Tables</a>
+        <a href="/admin/menu">Manage Menu</a>
+        <a href="/admin/allManagers">View All Managers</a>
+        <a href="/admin/create-new-admin">Create New Admin</a>
+        <a href="/admin/create-new-manager">Create New Manager</a>
+        <a href="/admin/vacate-manager">Vacate Manager</a>
+        <a href="/admin/logout">Logout</a>
+    </aside>
 
 </body>
 </html>

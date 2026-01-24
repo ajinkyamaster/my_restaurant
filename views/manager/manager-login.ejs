@@ -9,11 +9,20 @@
 <link rel="stylesheet" href="/styles/components.css">
 <link rel="stylesheet" href="/styles/manager-side-styles/manager-login.css">
 
+    <link rel="stylesheet" href="/styles/mobile-nav.css">
+    <script src="/scripts/mobile-nav.js" defer></script>
 </head>
 <body>
 
 <header class="login-navbar">
     <h1 class="logo">Manager Panel</h1>
+
+     <div class="hamburger">
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+
     <nav>
         <a href="/">Back to Home</a>
     </nav>
@@ -29,6 +38,14 @@
         <button type="submit">Login</button>
     </form>
 </div>
+
+    <div class="sidebar-overlay"></div>
+
+    <aside class="sidebar">
+        <h3>Manager</h3>
+
+        <a href="/">Back to Home</a>
+    </aside>
 
 </body>
 </html>
