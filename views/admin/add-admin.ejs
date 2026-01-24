@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create New Admin</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+   <link rel="stylesheet" href="/styles/base.css">
+<link rel="stylesheet" href="/styles/layout.css">
+<link rel="stylesheet" href="/styles/components.css">
+<link rel="stylesheet" href="/styles/admin-side-styles/admin-login.css">
+
+</head>
+<body>
+
+<header class="login-navbar">
+    <h1 class="logo">Create New Admin</h1>
+    <nav>
+        <a href="/admin/dashboard">Back to Dashboard</a>
+    </nav>
+</header>
+
+
+<section class="admin-section glass">
+    <h2>Create New Admin</h2>
+
+    <form method="POST" action="/admin/create-new-admin">
+        <div>
+            <label>Username</label><br>
+            <input type="text" name="username" required>
+        </div>
+
+        <div style="margin-top:10px;">
+            <label>Password</label><br>
+            <input type="password" name="password" required>
+        </div>
+
+        <div style="margin-top:20px;">
+            <button type="submit">Create New Admin</button>
+        </div>
+    </form>
+</section>
+
+</body>
+</html>

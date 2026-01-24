@@ -2,7 +2,6 @@ const express = require("express");
 const router = express.Router();
 const menuModel = require("../../models/menu");
 
-
 // Home route (customer)
 router.get("/", (req, res) => {
     res.render("customer/home");
@@ -59,6 +58,23 @@ router.get("/bookTable/:tableNumber", (req, res) => {
         errorMessage
     });
 });
+
+
+// TEMPORARY — DELETE AFTER USE
+router.get("/dev/add-admin", async (req, res) => {
+    const bcrypt = require("bcryptjs");
+
+    const hash = await bcrypt.hash("admin123", 10);
+
+    await adminModel.createAdmin({
+        username: "admin",
+        password: hash
+    });
+
+    res.send("Admin created");
+});
+
+
 
 
 module.exports = router;
