@@ -10,8 +10,8 @@ const findManagerByUsername = async (username) => {
 };
 
 const verifyPassword = async (manager, password) => {
-    // In a real application, use hashed passwords and a library like bcrypt
-    return manager.password === password;
+
+    return await bcrypt.compare(password, manager.password);
 }
 
 const createManager = async (username, password) => {

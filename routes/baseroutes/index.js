@@ -50,7 +50,7 @@ router.get("/bookTable/:tableNumber", (req, res) => {
     let errorMessage;
 
     if (req.query.error === 'table_occupied') {
-        errorMessage = "Sorry, the requested table is already occupied or does not exist.";
+        errorMessage = `Sorry, the requested table ${tableNumber} is already occupied or does not exist.`;
     }
 
     res.render("customer/bookTable", {

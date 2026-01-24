@@ -1,4 +1,5 @@
 const adminModel = require("../models/admin");
+const bcrypt = require("bcryptjs");
 
 const adminAuthMiddleware = async (req, res, next) => {
     try {
@@ -6,16 +7,16 @@ const adminAuthMiddleware = async (req, res, next) => {
 
         const admin = await adminModel.findAdminByUsername(username);
 
-        console.log("LOGIN ATTEMPT:", username, password);
-        console.log("ADMIN FOUND:", admin);
+        if (!admin) {
+            console.log("Admin not found:", username);
+        return res.render("admin/login", { error: "Invalid credentials" });
+    }
 
-
-        if (!admin || admin.password !== password) {
-            console.log("Admin authentication failed for username:", username);
-            return res.status(401).render("admin/login", {
-                error: "Invalid admin credentials"
-            });
-        }
+    const isPasswordValid = await bcrypt.compare(password, admin.password);
+    if (!isPasswordValid) {
+        console.log("Invalid password attempt for admin:", username);
+        return res.render("admin/login", { error: "Invalid credentials" });
+    } 
 
         // attach admin info (optional)
         req.admin = {
