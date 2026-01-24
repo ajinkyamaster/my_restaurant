@@ -10,11 +10,10 @@ const menuRoutes = require("./menu");
 const resetRoutes = require("./reset");
 
 
+router.use("/admin", adminLoginRoutes);
+
 // apply protection to all /admin routes
 router.use("/admin", adminProtectMiddleware);
-
-// admin login routes
-router.use("/admin", adminLoginRoutes);
 
 // admin dashboard route
 router.use("/admin", dashboardRoutes);
