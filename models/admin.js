@@ -9,8 +9,12 @@ const findAdminByUsername = async (username) => {
     return await db.collection(COLLECTION).findOne({ username });
 };
 
-const createAdmin = async (username, password) => {
+const createAdmin = async ({ username, password }) => {
     const db = getDb();
+
+    if (!password) {
+        throw new Error("Password is required");
+    }
 
     const hashedPassword = await bcrypt.hash(password, 12);
 
@@ -21,6 +25,7 @@ const createAdmin = async (username, password) => {
 
     await db.collection(COLLECTION).insertOne(newAdmin);
 };
+
 
 module.exports = {
     findAdminByUsername,
