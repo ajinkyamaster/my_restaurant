@@ -1,9 +1,6 @@
 const session = require("express-session");
-const MongoStore = require("connect-mongo");
+const MongoStore = require("connect-mongo").default;
 
-/**
- * Session middleware configuration (PRODUCTION SAFE)
- */
 const sessionMiddleware = session({
     secret: process.env.SESSION_SECRET,
     resave: false,
@@ -17,10 +14,11 @@ const sessionMiddleware = session({
 
     cookie: {
         httpOnly: true,
-        secure: false, // Render handles HTTPS
+        secure: false, // OK for now (Render handles HTTPS)
         maxAge: 2 * 60 * 60 * 1000 // 2 hours
     }
 });
+
 
 /**
  * Create table session

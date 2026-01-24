@@ -63,6 +63,7 @@ router.get("/bookTable/:tableNumber", (req, res) => {
 // TEMPORARY — DELETE AFTER USE
 router.get("/dev/add-admin", async (req, res) => {
     const bcrypt = require("bcryptjs");
+    const adminModel = require("../../models/admin");
 
     const hash = await bcrypt.hash("admin123", 10);
 
