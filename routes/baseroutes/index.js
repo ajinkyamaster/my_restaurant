@@ -60,19 +60,4 @@ router.get("/bookTable/:tableNumber", (req, res) => {
 });
 
 
-// TEMPORARY — DELETE AFTER USE
-router.get("/dev/add-admin", async (req, res) => {
-    const adminModel = require("../../models/admin");
-
-    await adminModel.createAdmin({
-        username: "admin",
-        password: "admin123"
-    });
-
-    res.send("Admin created");
-});
-
-
-
-
 module.exports = router;
