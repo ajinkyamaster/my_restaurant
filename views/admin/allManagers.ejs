@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Managers</title>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@300;400;500;600&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet" href="/styles/base.css">
+    <link rel="stylesheet" href="/styles/layout.css">
+    <link rel="stylesheet" href="/styles/components.css">
+    <link rel="stylesheet" href="/styles/admin-side-styles/admin-common.css">
+    <link rel="stylesheet" href="/styles/admin-side-styles/admin-managers.css">
+</head>
+
+<body>
+
+<header class="admin-navbar">
+    <h1>All Managers</h1>
+    <a href="/admin/dashboard">Back to Dashboard</a>
+</header>
+
+<section class="content">
+
+    <% if (!managers || managers.length === 0) { %>
+        <div class="no-managers">
+            <p>No managers found.</p>
+        </div>
+    <% } else { %>
+
+        <div class="managers-grid">
+            <% managers.forEach(m => { %>
+                <div class="manager-card">
+
+                    <h3><%= m.username %></h3>
+
+                    <div class="manager-details">
+                        <p>
+                            <strong>Manager ID:</strong>
+                            <%= m._id %>
+                        </p>
+
+                        <p>
+                            <strong>Status:</strong>
+                            <span class="status active">
+                                Active
+                            </span>
+                        </p>
+                    </div>
+
+                </div>
+            <% }) %>
+        </div>
+
+    <% } %>
+
+</section>
+
+</body>
+</html>

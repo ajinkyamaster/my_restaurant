@@ -1,8 +1,6 @@
 const express = require("express");
 const router = express.Router();
 
-const { getDb } = require("../../data/database");
-
 const tablesModel = require("../../models/tables");
 const bookingsModel = require("../../models/bookings");
 

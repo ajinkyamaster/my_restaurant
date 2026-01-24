@@ -26,8 +26,21 @@ const createManager = async (username, password) => {
     await db.collection(COLLECTION).insertOne(newManager);
 };
 
+const vacateManager = async (username) => {
+    const db = getDb();
+    const result = await db.collection(COLLECTION).deleteOne({ username });
+    return result.deletedCount > 0;
+};
+
+const getAllManagers = async () => {
+    const db = getDb();
+    return await db.collection(COLLECTION).find().toArray();
+};
+
 module.exports = {
     findManagerByUsername,
     verifyPassword,
-    createManager
+    createManager,
+    vacateManager,
+    getAllManagers
 };

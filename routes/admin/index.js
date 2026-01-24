@@ -9,6 +9,7 @@ const tablesRoutes = require("./tables");
 const menuRoutes = require("./menu");
 const resetRoutes = require("./reset");
 const addAdminManagerRoutes = require("./add-admin-manager");
+const allManagersRoutes = require("./allManagers");
 
 
 router.use("/admin", adminLoginRoutes);
@@ -27,6 +28,9 @@ router.use('/admin', tablesRoutes);
 
 // admin menu management route
 router.use('/admin', menuRoutes);
+
+// route to view all managers
+router.use("/admin", allManagersRoutes);
 
 // route to add admin/manager
 router.use("/admin", addAdminManagerRoutes);

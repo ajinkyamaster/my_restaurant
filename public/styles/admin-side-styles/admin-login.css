@@ -88,6 +88,18 @@ body {
     background-color: var(--gold-soft);
 }
 
+
+.success-message {
+    background-color: rgba(200, 60, 60, 0.15);
+    color: #2ecc71;
+    border: 1px solid rgba(200, 60, 60, 0.4);
+    padding: 10px 14px;
+    border-radius: 10px;
+    font-size: 13px;
+    margin-bottom: 18px;
+    text-align: center;
+}
+
 /* MOBILE */
 @media (max-width: 480px) {
     .admin-section {

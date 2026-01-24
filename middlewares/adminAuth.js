@@ -8,8 +8,8 @@ const adminAuthMiddleware = async (req, res, next) => {
         const admin = await adminModel.findAdminByUsername(username);
 
         if (!admin) {
-            console.log("Admin not found:", username);
-        return res.render("admin/login", { error: "Invalid credentials" });
+        console.log("Admin not found:", username);
+         return res.render("admin/login", { error: "Invalid credentials" });
     }
 
     const isPasswordValid = await bcrypt.compare(password, admin.password);

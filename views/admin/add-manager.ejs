@@ -22,6 +22,10 @@
 
 
 <section class="admin-section glass">
+    <% if (message) { %>
+            <p class="success-message"><%= message %></p>
+    <% } %>
+
     <h2>Create New Manager</h2>
 
     <form method="POST" action="/admin/create-new-manager">
