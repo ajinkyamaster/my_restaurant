@@ -7,6 +7,8 @@ const db = require("./data/database");
 
 const app = express();
 
+const cors = require('cors');
+
 // Body parsers
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -25,6 +27,8 @@ const customerRoutes = require("./routes/customer");
 const adminRoutes = require("./routes/admin");
 const managerAuthRoutes = require("./routes/manager/auth");
 const managerRoutes = require("./routes/manager");
+
+app.use(cors());
 
 app.use(sessionMiddleware);
 

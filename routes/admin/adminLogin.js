@@ -1,26 +1,15 @@
 const express = require("express");
 const router = express.Router();
 
-const adminAuthMiddleware = require("../../middlewares/adminAuth");
+const { getLogin, postLogin, getLogout, adminAuthMiddleware } = require("../../controllers/admin/authController");
 
 // GET /admin/login
-router.get("/login", (req, res) => {
-    res.render("admin/login", { error: null });
-});
+router.get("/login", getLogin);
 
 // POST /admin/login
-router.post("/login", adminAuthMiddleware, (req, res) => {
-    req.session.admin = true;
-    req.session.adminUser = req.admin;
+router.post("/login", adminAuthMiddleware, postLogin);
 
-    res.redirect("/admin/dashboard");
-});
-
-router.get("/logout", (req, res) => {
-    req.session.admin = false;
-    req.session.adminUser = null;
-    res.redirect("/admin/login");
-});
-
+// GET /admin/logout
+router.get("/logout", getLogout);
 
 module.exports = router;

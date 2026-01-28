@@ -1,11 +1,9 @@
 const express = require("express");
 const router = express.Router();
 
+const { getDashboard } = require("../../controllers/admin/dashboardController");
+
 // GET /admin/dashboard
-router.get("/dashboard", (req, res) => {
-    res.render("admin/dashboard", {
-        admin: req.session.adminUser
-    });
-});
+router.get("/dashboard", getDashboard);
 
 module.exports = router;

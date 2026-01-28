@@ -1,36 +1,15 @@
 const express = require("express");
 const router = express.Router();
 
-const managerModel = require("../../models/manager");
+const { getLogin, postLogin, getLogout } = require("../../controllers/manager/authController");
 
 // GET /manager/login
-router.get("/login", (req, res) => {
-    res.render("manager/manager-login");
-});
+router.get("/login", getLogin);
 
 // POST /manager/login
-router.post("/login", async (req, res) => {
-    const { username, password } = req.body;
-
-     const manager = await managerModel.findManagerByUsername(username);
-
-    if (!manager) {
-        return res.render("manager/manager-login", { error: "Invalid credentials" });
-    }
-
-    const isPasswordValid = await managerModel.verifyPassword(manager, password);
-
-    if (!isPasswordValid) {
-        return res.render("manager/manager-login", { error: "Invalid credentials" });
-    } 
-    req.session.manager = true;
-    res.redirect("/manager/dashboard");
-});
+router.post("/login", postLogin);
 
 // GET /manager/logout
-router.get("/logout", (req, res) => {
-    req.session.manager = false;
-    res.redirect("/");
-});
+router.get("/logout", getLogout);
 
 module.exports = router;
