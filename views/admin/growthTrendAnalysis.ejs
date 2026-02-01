@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Growth Trend Analysis</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/styles/base.css">
+    <link rel="stylesheet" href="/styles/layout.css">
+    <link rel="stylesheet" href="/styles/components.css">
+    <link rel="stylesheet" href="/styles/admin-side-styles/admin-common.css">
+    <link rel="stylesheet" href="/styles/admin-side-styles/admin-ai-analysis.css">
+
+    <link rel="stylesheet" href="/styles/mobile-nav.css">
+    <script src="/scripts/mobile-nav.js" defer></script>
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="/scripts/ai-growth-chart.js" type="text/javascript"></script>
+</head>
+
+<body>
+
+<header class="admin-navbar">
+    <h1 class="logo">Admin Panel</h1>
+
+    <div class="hamburger">
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+
+    <nav class="admin-nav-links">
+        <a href="/admin/dashboard">Back to Dashboard</a>
+        <a href="/admin/viewAllBookings">View All Bookings</a>
+        <a href="/admin/tables">Manage Tables</a>
+        <a href="/admin/menu">Manage Menu</a>
+        <a href="/admin/allManagers">View All Managers</a>
+        <a href="/admin/logout">Logout</a>
+    </nav>
+</header>
+
+<section class="dashboard-container">
+
+  <h2 class="welcome-text">
+    AI Growth Analysis -
+  </h2>
+
+  <!-- TREND INDICATOR -->
+  <div class="trend-indicator glass">
+    <span class="trend-label">Overall Trend:</span>
+    <span class="trend-value <%= trend === 'upward' ? 'trend-up' : 'trend-down' %>">
+      <%= trend === 'upward' ? '📈 Upward Growth' : '📉 Possible Decline' %>
+    </span>
+  </div>
+
+  <!-- CHART -->
+  <div class="chart-card glass">
+  <canvas
+    id="growthChart"
+    data-history='<%- JSON.stringify(history) %>'
+    data-prediction-revenue="<%= prediction.revenue %>"
+    data-prediction-profit="<%= prediction.profit %>">
+  </canvas>
+</div>
+
+
+  <!-- PREDICTIONS -->
+  <div class="prediction-cards">
+    <div class="prediction-card glass">
+      <h3>Next Week Revenue</h3>
+      <p>₹ <%= prediction.revenue.toLocaleString() %></p>
+    </div>
+
+    <div class="prediction-card glass">
+      <h3>Next Week Profit</h3>
+      <p>₹ <%= prediction.profit.toLocaleString() %></p>
+    </div>
+
+     <div class="prediction-card glass">
+    <h3>🧠 AI Insights</h3>
+    <ul>
+      <% insights.forEach(insight => { %>
+        <li><%= insight %></li>
+      <% }) %>
+    </ul>
+  </div>
+  </div>
+
+  <!-- AI INSIGHTS -->
+ 
+
+</section>
+
+
+    <footer class="footer">
+        <p>© 2026 My Restaurant. All rights reserved.</p>
+    </footer>
+
+<div class="sidebar-overlay"></div>
+
+<aside class="sidebar">
+    <h3>Admin Panel</h3>
+    <a href="/admin/dashboard">Dashboard</a>
+    <a href="/admin/viewAllBookings">View All Bookings</a>
+    <a href="/admin/tables">Manage Tables</a>
+    <a href="/admin/menu">Manage Menu</a>
+    <a href="/admin/allManagers">View All Managers</a>
+    <a href="/admin/create-new-admin">Create New Admin</a>
+    <a href="/admin/create-new-manager">Create New Manager</a>
+    <a href="/admin/vacate-manager">Vacate Manager</a>
+    <a href="/admin/logout">Logout</a>
+</aside>
+
+</body>
+</html>

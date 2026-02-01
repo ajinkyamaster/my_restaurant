@@ -32,7 +32,7 @@ body {
 
 /* CARDS WRAPPER */
 .dashboard-cards {
-    width:80rem;
+    width:100%;
     display: flex;
     justify-content: center;
     gap: 70px;

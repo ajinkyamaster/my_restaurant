@@ -10,15 +10,20 @@ const menuRoutes = require("./menu");
 const resetRoutes = require("./reset");
 const addAdminManagerRoutes = require("./add-admin-manager");
 const allManagersRoutes = require("./allManagers");
+const aiAnalysisRoutes = require("./ai-analysis");
 
 
 router.use("/admin", adminLoginRoutes);
+
 
 // apply protection to all /admin routes
 router.use("/admin", adminProtectMiddleware);
 
 // admin dashboard route
 router.use("/admin", dashboardRoutes);
+
+// admin AI Growth Trend Analysis route
+router.use('/admin', aiAnalysisRoutes);
 
 // admin viewbookings route
 router.use("/admin", bookingsRoutes);
