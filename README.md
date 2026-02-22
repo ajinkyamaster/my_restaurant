@@ -1,273 +1,184 @@
-Smart Restaurant Management System
+# Smart Restaurant Management System
 
-An end-to-end QR-based restaurant ordering and table management system with AI-powered analytics and future trend prediction, designed to streamline dine-in operations, enhance customer experience, and enable data-driven decision-making for restaurant administrators.
+An end-to-end QR-based restaurant ordering and table management system with AI-powered analytics and future trend prediction.
 
- Overview --
+Built with a **Next.js** frontend and **Express.js** API backend, deployed as two independent services.
 
-The Smart Restaurant Management System digitizes the complete dine-in workflow using QR-based table sessions, real-time order management, and machine learning–driven business insights.
+> **Live Demo:**  
+> Frontend: [my-restaurant-frontend-43pp.onrender.com](https://my-restaurant-frontend-43pp.onrender.com)  
+> Backend API: [my-restaurant-1-bdhy.onrender.com](https://my-restaurant-1-bdhy.onrender.com)
 
-The system is designed strictly for on-premise dine-in customers and does not support long-distance or advance table booking, as each booking creates an active table session.
+---
 
-The platform is role-based and consists of:
+## Overview
 
-Customer Panel
+Digitizes the complete dine-in workflow — QR-based table sessions, real-time order management, and ML-driven business insights. Designed strictly for on-premise dine-in (no advance/remote booking).
 
-Manager Panel
+**Three role-based panels:** Customer · Manager · Admin
 
-Admin Panel
+---
 
- Customer Workflow--
-Table Booking Logic
+## Architecture
 
-Each restaurant table is designed to have a unique QR code
+```
+┌──────────────────────┐       ┌──────────────────────┐       ┌──────────────┐
+│   Next.js Frontend   │──────▶│   Express.js API      │──────▶│   MongoDB    │
+│   (Render - Static)  │ JSON  │   (Render - Server)   │       │   (Atlas)    │
+└──────────────────────┘       └──────────┬───────────┘       └──────────────┘
+                                          │
+                                          ▼
+                                ┌──────────────────┐
+                                │  Python FastAPI   │
+                                │  (ML Predictions) │
+                                └──────────────────┘
+```
 
-QR-based booking is fully implemented
+The frontend was **migrated from server-rendered EJS templates to a Next.js (React) app**. The backend now serves only JSON API endpoints — all EJS views, SSR routes, and view-specific middlewares have been removed.
 
-Current booking flow supports two modes:
+---
 
-1️⃣ QR-Based Table Booking (Implemented & Preferred)
+## Tech Stack
 
-Customer scans the QR code placed on the table
+| Layer | Technology |
+|-------|-----------|
+| **Frontend** | Next.js 15 (App Router), React, TypeScript, CSS Modules |
+| **Backend** | Node.js, Express.js, MongoDB (Mongoose-free, native driver) |
+| **AI/ML** | Python, FastAPI, Linear Regression, Random Forest |
+| **Deployment** | Render (frontend + backend as separate services) |
+| **Auth** | Session-based (express-session + connect-mongo) |
 
-The Book Table page is rendered automatically
+---
 
-The table number is auto-filled and non-editable
+## Customer Panel
 
-This ensures:
+### Table Booking
+- **QR-Based (Primary):** Scan QR on the table → book page auto-fills table number, non-editable. Ensures physical presence.
+- **Manual Entry (Temporary Fallback):** Customer types table number. Will be removed once all tables have QR codes.
 
-Customer is physically present at the table
+### Ordering Flow
+1. Book a table → session created (links customer, table, cart)
+2. Browse digital menu → add items to cart
+3. Review cart → place order → checkout
+4. View order history & payment summary
 
-The correct table is booked
+### Payment
+- Currently simulated (redirects to success page)
+- Payment-gateway ready (Razorpay / Stripe / UPI can be plugged in)
 
-No table misuse or remote booking
+### End Session
+- Customer ends session after dining
+- Clears cart, orders, customer data & vacates the table
+- Ensures data privacy and table availability accuracy
 
-2️⃣ Manual Table Number Entry (Temporary Provision)
+---
 
-Due to project-level constraints (QRs not printed/attached to all tables yet):
+## Manager Panel
 
-Customers are required to manually enter the table number on the Book Table page
+- Secure login with session-based auth
+- View all active orders across tables
+- Accept/confirm orders (reflected in real-time on customer side)
+- Enables kitchen–service coordination
 
-This option assumes:
+---
 
-The customer is sitting at a vacant table
+## Admin Panel
 
-The booking is performed on-premise
+- Dashboard with live stats (tables, orders, bookings, revenue)
+- CRUD: menu items & tables
+- View all bookings with active/expired status
+- Manage managers & admins (create, vacate)
+- **AI Analytics:** weekly revenue/expense/profit trends with ML predictions
+- **End-of-Day Reset:** clears all bookings, orders & sessions
 
-!! This manual option is a temporary fallback
+---
 
-It will be removed once the system is fully QR-based
+## AI-Powered Analytics
 
-Ordering & Session Flow
-
-Once a table is booked, a table session is created
-
-The session links:
-
-Customer information
-
-Table number
-
-Cart and orders
-
-Customer can:
-
-View digital menu
-
-Add items to cart
-
-Place orders
-
-Proceed to checkout
-
-View order history
-
-Payment Flow (Current Implementation)
-
-Real-time payment gateway is not integrated yet
-
-On clicking Make Payment:
-
-Customer is redirected to a Payment Successful page
-
-This simulates a completed transaction for system flow validation
-
-The system is payment-gateway ready
-
-Production-grade payment integration (Razorpay / Stripe / UPI) can be added in future releases
-
-Ending the Table Session
-
-After completing dine-in, the customer must end the table session
-
-Ending the session:
-
-Clears customer data
-
-Clears cart and orders
-
-Vacates the table
-
-Ensures:
-
-Data privacy
-
-Table availability accuracy
-
-Clean system state
-
- Table Session Management--
-
-Each table session is:
-
-Temporary
-
-Isolated
-
-Tied to one physical table
-
-Once ended:
-
-All session-related data is deleted
-
-Prevents:
-
-Data leakage
-
-Session reuse
-
-Invalid bookings
-
- Manager Panel--
-
-Secure manager authentication
-
-View all active orders from all tables
-
-Accept and confirm orders table-wise
-
-Order status updates are reflected in real time on the customer interface
-
-Enables smooth kitchen–service coordination
-
- Admin Panel--
-
-View and manage all table bookings
-
-Monitor live table occupancy
-
-View and manage all active managers
-
-Create new admin or manager accounts
-
-Vacate or deactivate managers
-
-Add, edit, or remove menu items
-
-Add or modify restaurant tables
-
- AI-Powered Analytics & Predictions--
-
-The admin panel includes an AI-driven analytics dashboard:
-
-Weekly profit, revenue, and expense analysis
-
-Models trained on historical sales data
-
-Machine Learning models used:
-
-Linear Regression
-
-Random Forest Regressor
-
-Predicts:
-
-Expected next-week revenue
-
-Expected expenses
-
-Expected profit
-
-AI services deployed using Python FastAPI
-
- End-of-Day Reset & Data Maintenance--
-
-Admin can perform an end-of-day reset
-
-This:
-
-Clears all bookings
-
-Removes all customer orders
-
-Deletes all table sessions
-
-Ensures:
-
-Data cleanliness
-
-Privacy compliance
-
-Fresh operational state
-
- Technology Stack--
-Backend:
-
-Node.js
-
-Express.js
-
-MongoDB
-
-AI / ML:
-
-Python
-
-FastAPI
-
-Linear Regression
-
-Random Forest
-
-Frontend:
-
-HTML
-
-CSS
-
-JavaScript
-
-EJS
-
-Tools & Deployment:
-
-Docker
-
-Git
-
-Linux
-
- Key Highlights--
-
-QR-based table session architecture
-
-On-premise dine-in focused system
-
-Temporary manual table booking fallback
-
-Secure session lifecycle management
-
-AI-powered business analytics
-
-Payment-gateway-ready architecture
-
- Conclusion--
-
-The Smart Restaurant Management System is a production-ready, scalable platform that combines QR-based ordering, real-time operations, and AI-powered insights.
-
-The architecture is designed to:
-
-Fully transition to QR-only booking
-
-Support real-time payment gateways
-
-Scale for real-world restaurant environment
+The admin panel includes an ML-driven analytics dashboard:
+- Trained on historical weekly sales data
+- **Models:** Linear Regression + Random Forest Regressor
+- **Predicts:** next-week revenue, expenses, profit
+- Served via Python FastAPI microservice
+
+---
+
+## Project Structure
+
+```
+my_restaurant/
+├── app.js                    # Express entry point (API-only)
+├── controllers/
+│   ├── baseController.js     # Menu & session API
+│   └── customer/             # Cart, orders, session, tables API
+├── routes/
+│   ├── customer/api.js       # /api/* routes
+│   ├── admin/api.js          # /api/admin/* routes
+│   └── manager/api.js        # /api/manager/* routes
+├── models/                   # MongoDB data access (unchanged)
+├── session/                  # Session config (cross-site cookie support)
+├── frontend/                 # Next.js app
+│   ├── app/                  # Pages (customer, admin, manager)
+│   ├── components/           # Reusable UI components
+│   ├── utils/                # API client functions
+│   └── styles/               # Theme & global styles
+└── future_trends/            # Python FastAPI ML service
+```
+
+---
+
+## Local Development
+
+```bash
+# Backend
+npm install
+npm run dev          # Starts Express on :5000
+
+# Frontend
+cd frontend
+npm install
+npm run dev          # Starts Next.js on :3000
+
+# AI Service (optional)
+cd future_trends
+pip install -r requirements.txt
+uvicorn app:app --port 8000
+```
+
+Create a `.env` in root:
+```
+MONGO_URI=your_mongodb_uri
+DB_NAME=my_restro
+SESSION_SECRET=your_secret
+```
+
+---
+
+## Deployment (Render)
+
+Two separate Render Web Services from the same GitHub repo:
+
+| Service | Root Directory | Build Command | Start Command |
+|---------|---------------|---------------|---------------|
+| **Backend** | *(root)* | `npm install` | `node app.js` |
+| **Frontend** | `frontend` | `npm install && npm run build` | `npm start` |
+
+**Environment variables:**
+
+| Service | Key | Value |
+|---------|-----|-------|
+| Backend | `NODE_ENV` | `production` |
+| Backend | `FRONTEND_URL` | `https://your-frontend.onrender.com` |
+| Frontend | `NEXT_PUBLIC_API_URL` | `https://your-backend.onrender.com` |
+
+---
+
+## Key Highlights
+
+- QR-based table session architecture
+- Migrated from EJS to Next.js (React) frontend
+- Backend serves pure JSON API — no server-rendered views
+- Cross-site cookie support for split deployments
+- Session-based auth for all three panels
+- AI-powered business analytics with ML predictions
+- Payment-gateway-ready architecture
+- End-of-day reset for data cleanliness
