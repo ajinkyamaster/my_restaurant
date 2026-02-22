@@ -10,6 +10,14 @@ const app = express();
 const cors = require('cors');
 const helmet = require('helmet');
 
+// Enable CORS
+app.use(cors({
+    origin: ['http://localhost:3000', 'http://localhost:3001', 'http://127.0.0.1:3000', 'http://127.0.0.1:3001'],
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization']
+}));
+
 // Body parsers
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -17,34 +25,18 @@ app.use(express.urlencoded({ extended: true }));
 // Static files
 app.use(express.static(path.join(__dirname, "public")));
 
-// Set EJS as view engine
-app.set("view engine", "ejs");
-app.set("views", path.join(__dirname, "views"));
-
 const { sessionMiddleware } = require("./session/session-config");
 
-const baseRoutes = require("./routes/baseroutes");
-const customerRoutes = require("./routes/customer");
-const adminRoutes = require("./routes/admin");
-const managerAuthRoutes = require("./routes/manager/auth");
-const managerRoutes = require("./routes/manager");
-
-
-
+const apiRoutes = require("./routes/customer/api");
+const adminApiRoutes = require("./routes/admin/api");
+const managerApiRoutes = require("./routes/manager/api");
 
 app.use(sessionMiddleware);
 
-app.use(baseRoutes);
-
-// Use customer routes
-app.use(customerRoutes);
-
-// Use admin routes
-app.use(adminRoutes);
-
-// Use manager routes
-app.use("/manager", managerAuthRoutes);
-app.use("/manager", managerRoutes);
+// JSON API routes for Next.js frontend
+app.use("/api", apiRoutes);
+app.use("/api/admin", adminApiRoutes);
+app.use("/api/manager", managerApiRoutes);
 
 // Port
 const PORT = process.env.PORT || 5000;
