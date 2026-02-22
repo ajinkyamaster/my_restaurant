@@ -1,4 +1,5 @@
-const MANAGER_API = "http://localhost:5000/api/manager";
+const BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+const MANAGER_API = `${BASE}/api/manager`;
 
 async function request(endpoint, options = {}) {
   const { headers, ...rest } = options;
