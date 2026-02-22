@@ -7,6 +7,9 @@ const db = require("./data/database");
 
 const app = express();
 
+// Trust proxy (Render uses reverse proxy)
+app.set("trust proxy", 1);
+
 const cors = require('cors');
 const helmet = require('helmet');
 

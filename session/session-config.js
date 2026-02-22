@@ -1,6 +1,8 @@
 const session = require("express-session");
 const MongoStore = require("connect-mongo").default;
 
+const isProduction = process.env.NODE_ENV === "production";
+
 const sessionMiddleware = session({
     secret: process.env.SESSION_SECRET,
     resave: false,
@@ -14,8 +16,8 @@ const sessionMiddleware = session({
 
     cookie: {
         httpOnly: true,
-        secure: false, // OK for now (Render handles HTTPS)
-        sameSite: "lax",
+        secure: isProduction,
+        sameSite: isProduction ? "none" : "lax",
         maxAge: 2 * 60 * 60 * 1000 // 2 hours
     }
 });
