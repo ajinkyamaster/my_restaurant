@@ -15,6 +15,7 @@ const sessionMiddleware = session({
     cookie: {
         httpOnly: true,
         secure: false, // OK for now (Render handles HTTPS)
+        sameSite: "lax",
         maxAge: 2 * 60 * 60 * 1000 // 2 hours
     }
 });

@@ -2,44 +2,45 @@ const bookingsModel = require("../../models/bookings");
 const tablesModel = require("../../models/tables");
 const { createTableSession } = require("../../session/session-config");
 
-async function postBookTable(req, res) {
+// ─── API: GET /api/tables ─── Returns all tables with vacancy info
+async function apiGetTables(req, res) {
+    try {
+        const tables = await tablesModel.getAllTables();
+        res.json(tables);
+    } catch (err) {
+        console.error("API: Failed to fetch tables", err);
+        res.status(500).json({ error: "Failed to load tables" });
+    }
+}
+
+// ─── API: POST /api/bookTable ─── Book a table (JSON)
+async function apiBookTable(req, res) {
     try {
         const { name, tableNumber } = req.body;
-        
-        // 1. Get vacant table matching capacity
-        const desiredTable = await tablesModel.getTableByTableNumber(tableNumber);
+        const desiredTable = await tablesModel.getTableByTableNumber(parseInt(tableNumber));
 
         if (!desiredTable) {
-            return res.redirect("/bookTable?error=table_occupied&tableNumber=" + tableNumber);
+            return res.status(400).json({ error: `Table ${tableNumber} is already occupied or does not exist.` });
         }
 
-        // 2. Prepare booking data
         const bookingData = {
             customerName: name,
             tableNumber: desiredTable.tableNumber,
-            bookingTime: new Date()
+            bookingTime: new Date(),
         };
 
-        // 3. Save booking
         await bookingsModel.createBooking(bookingData);
-
-        // 4. Mark table occupied
         await tablesModel.markTableOccupied(desiredTable._id);
-
-        // 5. Create session for the table
         createTableSession(req, desiredTable, name);
 
-        // 6. Render confirmation
-        res.render("customer/bookingConfirmed", {
-            booking: bookingData
-        });
-
-    } catch (error) {
-        console.error(error);
-        res.status(500).send("Booking failed");
+        res.json({ success: true, booking: bookingData });
+    } catch (err) {
+        console.error("API: Booking failed", err);
+        res.status(500).json({ error: "Booking failed" });
     }
 }
 
 module.exports = {
-    postBookTable
+    apiGetTables,
+    apiBookTable
 };

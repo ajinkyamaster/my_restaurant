@@ -1,0 +1,84 @@
+.header {
+  padding-top: var(--space-3xl);
+  padding-bottom: var(--space-xl);
+  text-align: center;
+}
+
+.title {
+  font-family: var(--font-heading);
+  font-size: clamp(2rem, 4vw, 3rem);
+  margin-bottom: var(--space-sm);
+}
+
+.gold {
+  color: var(--gold);
+}
+
+.subtitle {
+  color: var(--text-secondary);
+  font-size: 1rem;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+/* ── Menu Grid ─────────────────────────────────────────── */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: var(--space-xl);
+}
+
+/* ── Floating Cart Button ──────────────────────────────── */
+.cartFab {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: 0.85rem 1.5rem;
+  background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+  color: var(--bg-primary);
+  font-size: 1rem;
+  font-weight: 700;
+  border: none;
+  border-radius: 999px;
+  cursor: pointer;
+  box-shadow: 0 4px 20px rgba(212, 168, 67, 0.4);
+  transition: all var(--transition-fast);
+  z-index: 900;
+  animation: fadeInUp 0.4s var(--ease-out);
+}
+
+.cartFab:hover {
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 6px 30px rgba(212, 168, 67, 0.5);
+}
+
+.cartCount {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  background: var(--bg-primary);
+  color: var(--gold);
+  font-size: 0.75rem;
+  font-weight: 700;
+  border-radius: 50%;
+}
+
+.cartFabTotal {
+  font-size: 0.9rem;
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 640px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}

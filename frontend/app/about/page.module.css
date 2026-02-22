@@ -1,0 +1,157 @@
+.hero {
+  position: relative;
+  min-height: 50vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.heroOverlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(15, 15, 20, 0.40) 0%,
+    rgba(15, 15, 20, 0.60) 100%
+  );
+}
+
+.heroContent {
+  position: relative;
+  z-index: 2;
+  padding: var(--space-xl);
+  animation: fadeInUp 0.7s var(--ease-out);
+}
+
+.heroTitle {
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  margin-bottom: var(--space-md);
+}
+
+.gold { color: var(--gold); }
+
+.heroSubtitle {
+  color: var(--text-secondary);
+  font-size: 1.05rem;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+/* ── Grid ──────────────────────────────────────────────── */
+.grid {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  gap: var(--space-3xl);
+  align-items: start;
+}
+
+.sectionTitle {
+  font-family: var(--font-heading);
+  font-size: 1.8rem;
+  margin-bottom: var(--space-lg);
+}
+
+.content p {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  line-height: 1.8;
+  margin-bottom: var(--space-lg);
+}
+
+/* ── Stats ─────────────────────────────────────────────── */
+.stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-md);
+}
+
+.statCard {
+  background: var(--bg-card);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid var(--border-card);
+  border-radius: var(--radius-lg);
+  padding: var(--space-xl);
+  text-align: center;
+  transition: border-color var(--transition-fast);
+}
+
+.statCard:hover {
+  border-color: var(--border-gold);
+}
+
+.statValue {
+  display: block;
+  font-family: var(--font-heading);
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--gold);
+  margin-bottom: var(--space-xs);
+}
+
+.statLabel {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+/* ── Values ────────────────────────────────────────────── */
+.valuesSection {
+  background: rgba(10, 10, 12, 0.5);
+  border-top: 1px solid var(--border-subtle);
+}
+
+.valuesGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: var(--space-xl);
+}
+
+.valueCard {
+  background: var(--bg-card);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid var(--border-card);
+  border-radius: var(--radius-lg);
+  padding: var(--space-2xl) var(--space-xl);
+  text-align: center;
+  transition: all var(--transition-base);
+}
+
+.valueCard:hover {
+  border-color: var(--border-gold);
+  transform: translateY(-4px);
+}
+
+.valueIcon {
+  font-size: 2.5rem;
+  display: block;
+  margin-bottom: var(--space-md);
+}
+
+.valueCard h3 {
+  font-family: var(--font-heading);
+  font-size: 1.1rem;
+  color: var(--text-primary);
+  margin-bottom: var(--space-sm);
+}
+
+.valueCard p {
+  font-size: 0.88rem;
+  color: var(--text-muted);
+  line-height: 1.6;
+}
+
+/* ── Responsive ────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}

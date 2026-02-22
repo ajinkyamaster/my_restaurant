@@ -1,0 +1,122 @@
+.header {
+  padding-top: var(--space-3xl);
+  padding-bottom: var(--space-xl);
+  text-align: center;
+}
+
+.title {
+  font-family: var(--font-heading);
+  font-size: clamp(2rem, 4vw, 3rem);
+  margin-bottom: var(--space-sm);
+}
+
+.gold { color: var(--gold); }
+
+.subtitle {
+  color: var(--text-secondary);
+  font-size: 1rem;
+  max-width: 450px;
+  margin: 0 auto;
+}
+
+/* ── Grid ──────────────────────────────────────────────── */
+.grid {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: var(--space-2xl);
+  max-width: 960px;
+  margin: 0 auto;
+  align-items: start;
+}
+
+/* ── Form Card ─────────────────────────────────────────── */
+.formCard {
+  background: var(--bg-card);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid var(--border-card);
+  border-radius: var(--radius-lg);
+  padding: var(--space-2xl);
+}
+
+.textarea {
+  resize: vertical;
+  min-height: 120px;
+}
+
+/* ── Success ───────────────────────────────────────────── */
+.successMsg {
+  text-align: center;
+  padding: var(--space-2xl);
+}
+
+.successIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  background: rgba(46, 204, 113, 0.12);
+  color: #2ecc71;
+  border-radius: 50%;
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: var(--space-md);
+}
+
+.successMsg h3 {
+  color: #2ecc71;
+  margin-bottom: var(--space-sm);
+}
+
+.successMsg p {
+  color: var(--text-secondary);
+  margin-bottom: var(--space-lg);
+}
+
+/* ── Info ──────────────────────────────────────────────── */
+.infoSection {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.infoCard {
+  background: var(--bg-card);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid var(--border-card);
+  border-radius: var(--radius-lg);
+  padding: var(--space-xl);
+  transition: border-color var(--transition-fast);
+}
+
+.infoCard:hover {
+  border-color: var(--border-gold);
+}
+
+.infoIcon {
+  font-size: 1.5rem;
+  display: block;
+  margin-bottom: var(--space-sm);
+}
+
+.infoCard h3 {
+  font-family: var(--font-heading);
+  font-size: 1rem;
+  color: var(--text-primary);
+  margin-bottom: var(--space-xs);
+}
+
+.infoCard p {
+  font-size: 0.88rem;
+  color: var(--text-muted);
+  line-height: 1.6;
+}
+
+/* ── Responsive ────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}

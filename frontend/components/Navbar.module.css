@@ -1,0 +1,252 @@
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  height: var(--navbar-height);
+  background: rgba(13, 13, 13, 0.75);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border-bottom: 1px solid var(--border-subtle);
+  transition: all var(--transition-base);
+}
+
+.navbar.scrolled {
+  background: rgba(13, 13, 13, 0.95);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
+}
+
+.inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 100%;
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 var(--space-lg);
+}
+
+/* ── Logo ─────────────────────────── */
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  text-decoration: none;
+}
+
+.logoIcon {
+  color: var(--gold);
+  font-size: 1.4rem;
+}
+
+.logoText {
+  font-family: var(--font-heading);
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: 0.02em;
+}
+
+.logo:hover .logoText {
+  color: var(--gold-light);
+}
+
+/* ── Nav Links ────────────────────── */
+.links {
+  display: flex;
+  list-style: none;
+  gap: 0.25rem;
+}
+
+.link {
+  display: block;
+  padding: 0.5rem 0.85rem;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  text-decoration: none;
+  border-radius: var(--radius-sm);
+  transition: all var(--transition-fast);
+  letter-spacing: 0.01em;
+}
+
+.link:hover {
+  color: var(--text-primary);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.link.active {
+  color: var(--gold);
+  background: rgba(212, 168, 67, 0.08);
+}
+
+/* ── Right Section ────────────────── */
+.right {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+}
+
+/* ── Session Badge ────────────────── */
+.session {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.35rem 0.75rem;
+  background: rgba(212, 168, 67, 0.1);
+  border: 1px solid var(--border-gold);
+  border-radius: 999px;
+  font-size: 0.8rem;
+}
+
+.sessionDot {
+  width: 7px;
+  height: 7px;
+  background: #2ecc71;
+  border-radius: 50%;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+.sessionText {
+  color: var(--gold-light);
+  font-weight: 600;
+}
+
+.endBtn {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: 0.85rem;
+  padding: 0 0.15rem;
+  transition: color var(--transition-fast);
+}
+
+.endBtn:hover {
+  color: var(--red-light);
+}
+
+/* ── Hamburger ────────────────────── */
+.hamburger {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+}
+
+.hamburger span {
+  display: block;
+  width: 22px;
+  height: 2px;
+  background: var(--text-primary);
+  border-radius: 2px;
+  transition: all var(--transition-fast);
+}
+
+.hamburger.open span:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+
+.hamburger.open span:nth-child(2) {
+  opacity: 0;
+}
+
+.hamburger.open span:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
+/* ── Mobile Menu ──────────────────── */
+.mobileMenu {
+  display: none;
+  position: fixed;
+  top: var(--navbar-height);
+  left: 0;
+  right: 0;
+  background: rgba(13, 13, 13, 0.97);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border-subtle);
+  padding: var(--space-lg);
+  transform: translateY(-100%);
+  opacity: 0;
+  transition: all var(--transition-base);
+  pointer-events: none;
+  max-height: calc(100vh - var(--navbar-height));
+  overflow-y: auto;
+}
+
+.mobileMenu.mobileOpen {
+  transform: translateY(0);
+  opacity: 1;
+  pointer-events: all;
+}
+
+.mobileMenu ul {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.mobileLink {
+  display: block;
+  padding: 0.85rem 1rem;
+  font-size: 1rem;
+  color: var(--text-secondary);
+  text-decoration: none;
+  border-radius: var(--radius-md);
+  transition: all var(--transition-fast);
+}
+
+.mobileLink:hover,
+.mobileLink.active {
+  color: var(--gold);
+  background: rgba(212, 168, 67, 0.08);
+}
+
+.mobilEnd {
+  width: 100%;
+  padding: 0.85rem 1rem;
+  background: rgba(192, 57, 43, 0.15);
+  color: var(--red-light);
+  border: 1px solid rgba(192, 57, 43, 0.3);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  font-size: 0.95rem;
+  font-family: var(--font-body);
+  transition: all var(--transition-fast);
+  text-align: left;
+}
+
+.mobilEnd:hover {
+  background: rgba(192, 57, 43, 0.25);
+}
+
+/* ── Responsive ───────────────────── */
+@media (max-width: 900px) {
+  .links {
+    display: none;
+  }
+
+  .hamburger {
+    display: flex;
+  }
+
+  .mobileMenu {
+    display: block;
+  }
+}
+
+@media (max-width: 480px) {
+  .session {
+    display: none;
+  }
+}

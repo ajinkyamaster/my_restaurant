@@ -1,26 +1,20 @@
 const ordersModel = require("../../models/orders");
 
-// GET /orders -> shows current table's orders
-async function getOrders(req, res) {
+// ─── API: GET /api/orders ─── Returns orders as JSON
+async function apiGetOrders(req, res) {
     if (!req.session.table || !req.session.table.tableNumber) {
-        return res.redirect("/");
+        return res.status(401).json({ error: "No active table session", redirect: "/booking" });
     }
-
     const tableNumber = req.session.table.tableNumber;
-
     try {
         const orders = await ordersModel.getOrdersByTableNumber(tableNumber);
-
-        return res.render("customer/orders", {
-            tableNumber,
-            orders
-        });
+        res.json({ orders, tableNumber });
     } catch (err) {
-        console.error("Failed to fetch orders for table", tableNumber, err);
-        return res.status(500).send("Unable to fetch orders right now.");
+        console.error("API: Failed to fetch orders for table", tableNumber, err);
+        res.status(500).json({ error: "Failed to load orders" });
     }
 }
 
 module.exports = {
-    getOrders
+    apiGetOrders
 };

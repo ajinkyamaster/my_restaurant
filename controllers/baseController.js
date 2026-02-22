@@ -1,63 +1,29 @@
 const menuModel = require("../models/menu");
 
-// Home route (customer)
-function getHome(req, res) {
-    res.render("customer/home");
-}
-
-// GET /about
-function getAbout(req, res) {
-    res.render("about");
-}
-
-// GET /menu
-async function getMenu(req, res) {
+// ─── API: GET /api/menu ─── Returns menu items as JSON
+async function apiGetMenu(req, res) {
     try {
         const menuItems = await menuModel.getAllMenuItems();
-
-        res.render("customer/menu", {
-            menuItems,
-            message: req.query.message
-        });
-        
+        res.json(menuItems);
     } catch (error) {
-        console.error("Error fetching menu items:", error);
-        res.status(500).send("Failed to load menu");
+        console.error("API: Error fetching menu items:", error);
+        res.status(500).json({ error: "Failed to load menu items" });
     }
 }
 
-// GET /bookTable
-function getBookTable(req, res) {
-    let errorMessage;
-
-    if (req.query.error === 'table_occupied') {
-        errorMessage = `Sorry, the requested table ${req.query.tableNumber} is already occupied or does not exist.`;
+// ─── API: GET /api/session ─── Returns current session info
+function apiGetSession(req, res) {
+    if (!req.session.table) {
+        return res.json({ active: false });
     }
-
-    res.render("customer/bookTable", {
-        errorMessage,
-    });
-}
-
-// GET /bookTable/:tableNumber
-function getBookTableWithNumber(req, res) {
-    const tableNumber = req.params.tableNumber;
-    let errorMessage;
-
-    if (req.query.error === 'table_occupied') {
-        errorMessage = `Sorry, the requested table ${tableNumber} is already occupied or does not exist.`;
-    }
-
-    res.render("customer/bookTable", {
-        tableNumber,
-        errorMessage
+    res.json({
+        active: true,
+        tableNumber: req.session.table.tableNumber,
+        customerName: req.session.table.customerName,
     });
 }
 
 module.exports = {
-    getHome,
-    getAbout,
-    getMenu,
-    getBookTable,
-    getBookTableWithNumber
+    apiGetMenu,
+    apiGetSession
 };

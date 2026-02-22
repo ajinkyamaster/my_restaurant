@@ -1,0 +1,30 @@
+.header {
+  padding-top: var(--space-3xl);
+  padding-bottom: var(--space-xl);
+  text-align: center;
+}
+
+.title {
+  font-family: var(--font-heading);
+  font-size: clamp(2rem, 4vw, 3rem);
+  margin-bottom: var(--space-xs);
+}
+
+.gold { color: var(--gold); }
+
+.subtitle {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+}
+
+.orderGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+  gap: var(--space-xl);
+}
+
+@media (max-width: 480px) {
+  .orderGrid {
+    grid-template-columns: 1fr;
+  }
+}

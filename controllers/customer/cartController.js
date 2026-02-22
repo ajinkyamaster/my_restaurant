@@ -1,25 +1,6 @@
 const ordersModel = require("../../models/orders");
 
-// GET /cart
-function getCart(req, res) {
-    if (!req.session.table) {
-        return res.redirect("/bookTable");
-    }
-
-    const cart = req.session.table.cart || [];
-
-    const grandTotal = cart.reduce(
-        (sum, item) => sum + item.totalPrice,
-        0
-    );
-
-    res.render("customer/cart", {
-        cart,
-        grandTotal
-    });
-}
-
-// POST /cart/add
+// POST /cart/add (shared - returns JSON)
 function postAddToCart(req, res) {
     if (!req.session.table) {
         return res.status(401).json({
@@ -45,14 +26,15 @@ function postAddToCart(req, res) {
     }
 
     req.session.table.cart = cart;
+    const grandTotal = cart.reduce((sum, ci) => sum + ci.totalPrice, 0);
 
     res.json({
-        success: true,
-        cart
+        cart,
+        grandTotal
     });
 }
 
-// POST /cart/remove
+// POST /cart/remove (shared - returns JSON)
 function postRemoveFromCart(req, res) {
     if (!req.session.table) {
         return res.status(403).json({ message: "No active table session" });
@@ -64,95 +46,103 @@ function postRemoveFromCart(req, res) {
     cart = cart.filter(ci => ci.item !== item);
 
     req.session.table.cart = cart;
+    const grandTotal = cart.reduce((sum, ci) => sum + ci.totalPrice, 0);
 
-    res.json({ message: "Item removed", cart });
+    res.json({ message: "Item removed", cart, grandTotal });
 }
 
-// GET /payment
-function getPayments(req, res) {
-    if (!req.session.table || req.session.table.cart.length === 0) {
-        return res.redirect("/menu");
+// ─── API: GET /api/cart ─── Returns cart as JSON
+function apiGetCart(req, res) {
+    if (!req.session.table) {
+        return res.status(401).json({ error: "No active table session", redirect: "/booking" });
     }
+    const cart = req.session.table.cart || [];
+    const grandTotal = cart.reduce((sum, item) => sum + item.totalPrice, 0);
+    res.json({ cart, grandTotal, tableNumber: req.session.table.tableNumber });
+}
 
+// ─── API: POST /api/cart/update ─── Update item quantity
+function apiUpdateCartItem(req, res) {
+    if (!req.session.table) {
+        return res.status(401).json({ error: "No active table session" });
+    }
+    const { item, quantity, price } = req.body;
     const cart = req.session.table.cart;
+    const existingItem = cart.find(ci => ci.item === item);
 
-    const grandTotal = cart.reduce(
-        (sum, item) => sum + item.totalPrice,
-        0
-    );
+    if (existingItem) {
+        if (quantity <= 0) {
+            req.session.table.cart = cart.filter(ci => ci.item !== item);
+        } else {
+            existingItem.quantity = quantity;
+            existingItem.totalPrice = price * quantity;
+        }
+    }
+    const updatedCart = req.session.table.cart;
+    const grandTotal = updatedCart.reduce((sum, i) => sum + i.totalPrice, 0);
+    res.json({ cart: updatedCart, grandTotal });
+}
 
-    res.render("customer/payment", {
+// ─── API: GET /api/payments ─── Returns payment summary (cart ready for checkout)
+function apiGetPayments(req, res) {
+    if (!req.session.table) {
+        return res.status(401).json({ error: "No active table session", redirect: "/booking" });
+    }
+    const cart = req.session.table.cart || [];
+    const grandTotal = cart.reduce((sum, item) => sum + item.totalPrice, 0);
+    res.json({
         cart,
         grandTotal,
-        tableNumber: req.session.table.tableNumber
-    });
-}
-
-// POST /checkout
-function postCheckout(req, res) {
-    res.redirect("/payments");
-}
-
-// POST /makePayment
-function postMakePayment(req, res) {
-    // Payment processing logic would go here
-
-    // For now, we assume payment is successful
-    res.redirect("/paymentSuccess");
-}
-
-// GET /myPayments
-async function getMyPayments(req, res) {
-    let tableOrders;
-    if(!req.session.table) {
-        return res.render("customer/myPayments", { tableOrders: [] });
-    }
-
-    tableOrders = await ordersModel.getOrdersByTableNumber(req.session.table.tableNumber);
-
-    res.render("customer/myPayments", { tableOrders });
-}
-
-// GET /paymentSuccess
-async function getPaymentSuccess(req, res) {
-    if (!req.session.table || req.session.table.cart.length === 0) {
-        return res.redirect("/");
-    }
-
-    const cart = req.session.table.cart;
-
-    const grandTotal = cart.reduce(
-        (sum, item) => sum + item.totalPrice,
-        0
-    );
-
-    // store order ONLY in DB
-    await ordersModel.createOrder({
         tableNumber: req.session.table.tableNumber,
-        customer: {
-            name: req.session.table?.customerName || "Dine-in Customer"
-        },
-        items: cart,
-        grandTotal,
-        orderedAt: new Date(),
-        status: "PLACED"
+        customerName: req.session.table.customerName,
     });
+}
 
-    // clear cart
-    req.session.table.cart = [];
+// ─── API: GET /api/myPayments ─── Returns past paid orders for current table
+async function apiGetMyPayments(req, res) {
+    if (!req.session.table) {
+        return res.json({ tableOrders: [] });
+    }
+    try {
+        const tableOrders = await ordersModel.getOrdersByTableNumber(req.session.table.tableNumber);
+        res.json({ tableOrders });
+    } catch (err) {
+        console.error("API: Failed to fetch payments", err);
+        res.status(500).json({ error: "Failed to load payment history" });
+    }
+}
 
-    res.render("customer/paymentSuccess", {
-        tableNumber: req.session.table.tableNumber
-    });
+// ─── API: POST /api/checkout ─── Process payment, save order, clear cart
+async function apiCheckout(req, res) {
+    if (!req.session.table || req.session.table.cart.length === 0) {
+        return res.status(400).json({ error: "Cart is empty or no session" });
+    }
+    const cart = req.session.table.cart;
+    const grandTotal = cart.reduce((sum, item) => sum + item.totalPrice, 0);
+
+    try {
+        await ordersModel.createOrder({
+            tableNumber: req.session.table.tableNumber,
+            customer: { name: req.session.table.customerName || "Dine-in Customer" },
+            items: cart,
+            grandTotal,
+            orderedAt: new Date(),
+            status: "PLACED",
+        });
+        req.session.table.cart = [];
+        res.json({ success: true, tableNumber: req.session.table.tableNumber });
+    } catch (err) {
+        console.error("API: Checkout failed", err);
+        res.status(500).json({ error: "Payment processing failed" });
+    }
 }
 
 module.exports = {
-    getCart,
     postAddToCart,
     postRemoveFromCart,
-    getPayments,
-    postCheckout,
-    postMakePayment,
-    getMyPayments,
-    getPaymentSuccess
+    apiGetCart,
+    apiUpdateCartItem,
+    apiGetPayments,
+    apiGetMyPayments,
+    apiCheckout
 };

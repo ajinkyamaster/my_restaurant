@@ -1,35 +1,22 @@
 const tablesModel = require("../../models/tables");
 const { destroyTableSession } = require("../../session/session-config");
 
-// GET /endSession
-function getEndSession(req, res) {
+// ─── API: POST /api/endSession ─── End session (JSON)
+async function apiEndSession(req, res) {
     if (!req.session.table) {
-        return res.redirect("/");
+        return res.json({ success: true, message: "No active session" });
     }
-
-    res.render("customer/endSession", {
-        tableNumber: req.session.table.tableNumber
-    });
-}
-
-// POST /vacateTable
-async function postVacateTable(req, res) {
-    if (!req.session.table) {
-        return res.redirect("/");
+    try {
+        const tableId = req.session.table.tableId;
+        await tablesModel.markTableVacant(tableId);
+        await destroyTableSession(req);
+        res.json({ success: true });
+    } catch (err) {
+        console.error("API: End session failed", err);
+        res.status(500).json({ error: "Failed to end session" });
     }
-
-    const tableId = req.session.table.tableId;
-
-    // mark table as vacant
-    await tablesModel.markTableVacant(tableId);
-
-    // destroy table session using session-config
-    await destroyTableSession(req);
-
-    res.redirect("/");
 }
 
 module.exports = {
-    getEndSession,
-    postVacateTable
+    apiEndSession
 };
