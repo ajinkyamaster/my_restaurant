@@ -33,6 +33,9 @@ app.use(
             }
         },
         crossOriginResourcePolicy: { policy: "cross-origin" },
+        // CSP frame-ancestors already blocks clickjacking; this keeps legacy
+        // browsers that ignore CSP equally protected.
+        xFrameOptions: { action: "deny" },
         referrerPolicy: { policy: "no-referrer" }
     })
 );

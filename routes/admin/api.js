@@ -243,27 +243,98 @@ router.post("/reset", async (req, res) => {
 });
 
 // ─── AI Analysis ─────────────────────────────────────────
+const AI_SERVICE_TOKEN = process.env.AI_SERVICE_TOKEN || "";
+const COST_RATIO = (() => {
+  const raw = Number(process.env.RESTAURANT_COST_RATIO);
+  return Number.isFinite(raw) && raw > 0 && raw < 1 ? raw : 0.65;
+})();
+
+const WEEK_MS = 7 * 24 * 60 * 60 * 1000;
+const TREND_WEEKS = 5;
+
+/** Bucket stored orders into the current week plus the four before it. */
+function weeklyBuckets(orders, now = Date.now()) {
+  const buckets = Array.from({ length: TREND_WEEKS }, (_, index) => {
+    const end = now - index * WEEK_MS;
+    return { index, start: end - WEEK_MS, end, revenue: 0, orders: 0 };
+  });
+
+  for (const order of orders) {
+    const time = order && order.orderedAt ? new Date(order.orderedAt).getTime() : NaN;
+    if (!Number.isFinite(time)) continue;
+    const bucket = buckets.find((entry) => time > entry.start && time <= entry.end);
+    if (!bucket) continue;
+    bucket.revenue += Number(order.grandTotal) || 0;
+    bucket.orders += 1;
+  }
+
+  return buckets;
+}
+
+const round2 = (value) => Math.round(value * 100) / 100;
+
+/** Per-order costs are not recorded, so expenses are estimated at COST_RATIO. */
+function summarizeWeek(bucket) {
+  const revenue = round2(bucket.revenue);
+  const expense = round2(revenue * COST_RATIO);
+  return {
+    revenue,
+    orders: bucket.orders,
+    avgOrderValue: bucket.orders ? round2(revenue / bucket.orders) : 0,
+    expense,
+    profit: round2(revenue - expense)
+  };
+}
+
 router.get("/ai-analysis", async (req, res) => {
+  // Real sales replace the hard-coded 275000/350/785 constants: the panel used
+  // to forecast on a fictional week regardless of what the restaurant sold.
+  const orders = await ordersModel.getAllOrders();
+  const buckets = weeklyBuckets(orders);
+
+  const current = summarizeWeek(buckets[0]);
+  const past = buckets.slice(1).reverse();
+  const history = past.map((bucket, index) => {
+    const week = summarizeWeek(bucket);
+    return {
+      week: `W-${past.length - index}`,
+      revenue: week.revenue,
+      total_expense: week.expense
+    };
+  });
+
   const currentWeekData = {
-    week_revenue: 275000,
-    week_orders: 350,
-    avg_order_value: 785,
-    total_expense: 175000,
-    profit: 100000,
+    week_revenue: current.revenue,
+    week_orders: current.orders,
+    avg_order_value: current.avgOrderValue,
+    total_expense: current.expense,
+    profit: current.profit,
     off_days: 0
   };
 
-  const history = [
-    { week: "W-1", revenue: 275000, total_expense: 200000 },
-    { week: "W-2", revenue: 270000, total_expense: 280000 },
-    { week: "W-3", revenue: 300000, total_expense: 200000 },
-    { week: "W-4", revenue: 280000, total_expense: 220000 }
-  ];
+  const basis = `Computed from ${orders.length} stored orders. Off-days are not tracked and expenses are estimated at ${Math.round(
+    COST_RATIO * 100
+  )}% of revenue.`;
+
+  if (current.orders === 0) {
+    return res.json({
+      available: false,
+      history,
+      currentWeek: currentWeekData,
+      prediction: { revenue: 0, profit: 0 },
+      trend: "unknown",
+      insights: ["No orders in the last 7 days — the forecast needs at least one week of sales."],
+      basis
+    });
+  }
 
   try {
+    const headers = { "Content-Type": "application/json" };
+    if (AI_SERVICE_TOKEN) headers["X-AI-Token"] = AI_SERVICE_TOKEN;
+
     const aiResponse = await fetch(`${AI_SERVICE_URL}/predict`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers,
       body: JSON.stringify(currentWeekData),
       signal: AbortSignal.timeout(AI_TIMEOUT_MS)
     });
@@ -271,18 +342,34 @@ router.get("/ai-analysis", async (req, res) => {
     if (!aiResponse.ok) throw new Error(`AI service responded ${aiResponse.status}`);
     const aiData = await aiResponse.json();
 
+    const predictedRevenue = Number(aiData.predicted_revenue);
+    const predictedProfit = Number(aiData.predicted_profit);
+    if (!Number.isFinite(predictedRevenue) || !Number.isFinite(predictedProfit)) {
+      throw new Error("AI service returned an unexpected payload");
+    }
+
     // The panel compares against "up"/"down"; the service used to return
     // "upward"/"downward", which made the badge permanently yellow.
     const trend =
       aiData.trend === "upward" ? "up" : aiData.trend === "downward" ? "down" : aiData.trend;
 
+    // Insights are rendered as text. Cap count and length so a compromised or
+    // buggy AI service cannot push unbounded data into the dashboard.
+    const insights = Array.isArray(aiData.insights)
+      ? aiData.insights
+          .filter((line) => typeof line === "string")
+          .slice(0, 5)
+          .map((line) => line.slice(0, 200))
+      : [];
+
     res.json({
       available: true,
       history,
       currentWeek: currentWeekData,
-      prediction: { revenue: aiData.predicted_revenue, profit: aiData.predicted_profit },
+      prediction: { revenue: Math.round(predictedRevenue), profit: Math.round(predictedProfit) },
       trend,
-      insights: Array.isArray(aiData.insights) ? aiData.insights : []
+      insights,
+      basis
     });
   } catch (err) {
     console.error("AI analysis unavailable:", err.message);
@@ -292,7 +379,8 @@ router.get("/ai-analysis", async (req, res) => {
       currentWeek: currentWeekData,
       prediction: { revenue: 0, profit: 0 },
       trend: "unknown",
-      insights: ["AI service is unavailable — no prediction was generated."]
+      insights: ["AI service is unavailable — no prediction was generated."],
+      basis
     });
   }
 });

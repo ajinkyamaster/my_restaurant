@@ -4,7 +4,6 @@
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.6",
     "dotenv": "^17.2.3",
-    "ejs": "^4.0.1",
     "express": "^5.2.1",
     "express-rate-limit": "^7.5.1",
     "helmet": "^8.1.0",
@@ -17,13 +16,15 @@
   "main": "app.js",
   "scripts": {
     "start": "node app.js",
-    "dev": "nodemon app.js"
+    "dev": "nodemon app.js",
+    "test:security": "node test/security.e2e.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "type": "commonjs",
   "devDependencies": {
+    "mongodb-memory-server": "^11.4.0",
     "nodemon": "^3.1.14"
   },
   "engines": {
