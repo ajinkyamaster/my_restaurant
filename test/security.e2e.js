@@ -14,8 +14,6 @@ process.env.NODE_ENV = "test";
 process.env.JWT_SECRET = process.env.JWT_SECRET || "test-only-secret-value-".padEnd(48, "0");
 process.env.FRONTEND_URL = "http://localhost:3000";
 process.env.DB_NAME = "my_restro_security_test";
-// A port nothing listens on: the AI branch must degrade, not hang the suite.
-process.env.AI_SERVICE_URL = "http://127.0.0.1:59999";
 
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
@@ -511,29 +509,7 @@ async function main() {
     `${beforeDelete.status} -> ${afterDelete.status}`
   );
 
-  // ─── 15. AI analytics uses real data ────────────────────
-  section("AI analytics");
-  const orders = await dbi.collection("orders").find({}).toArray();
-  const weekCutoff = Date.now() - 7 * 24 * 60 * 60 * 1000;
-  const realWeekRevenue = round2(
-    orders
-      .filter((o) => new Date(o.orderedAt).getTime() > weekCutoff)
-      .reduce((sum, o) => sum + (Number(o.grandTotal) || 0), 0)
-  );
-  const analysis = await adminClient.req("GET", "/api/admin/ai-analysis");
-  const reported = analysis.json && analysis.json.currentWeek && analysis.json.currentWeek.week_revenue;
-  check("AI analysis returns real weekly revenue", reported === realWeekRevenue, `reported ${reported}, DB ${realWeekRevenue}`);
-  check("hard-coded demo constants are gone", reported !== 275000);
-  check(
-    "AI branch degrades gracefully when the service is down",
-    analysis.json && analysis.json.available === false && typeof analysis.json.basis === "string"
-  );
-  check(
-    "history has four previous weeks",
-    analysis.json && Array.isArray(analysis.json.history) && analysis.json.history.length === 4
-  );
-
-  // ─── 16. Login brute-force limit (last: it poisons the limiter) ─
+  // ─── 15. Login brute-force limit (last: it poisons the limiter) ─
   section("Rate limiting");
   const brute = new Client(base);
   await brute.csrf();

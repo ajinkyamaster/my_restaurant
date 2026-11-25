@@ -12,7 +12,6 @@ const SIDEBAR_LINKS = [
   { href: "/admin/tables", label: "Manage Tables", icon: "🪑" },
   { href: "/admin/bookings", label: "Bookings", icon: "📅" },
   { href: "/admin/managers", label: "Managers", icon: "👥" },
-  { href: "/admin/ai-analysis", label: "AI Analysis", icon: "🤖" },
 ];
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {

@@ -1,6 +1,6 @@
 # Smart Restaurant Management System
 
-An end-to-end QR-based restaurant ordering and table management system with AI-powered analytics and future trend prediction.
+An end-to-end QR-based restaurant ordering and table management system.
 
 Built with a **Next.js** frontend and **Express.js** API backend, deployed as two independent services.
 
@@ -12,7 +12,7 @@ Built with a **Next.js** frontend and **Express.js** API backend, deployed as tw
 
 ## Overview
 
-Digitizes the complete dine-in workflow — QR-based table sessions, real-time order management, and ML-driven business insights. Designed strictly for on-premise dine-in (no advance/remote booking).
+Digitizes the complete dine-in workflow — QR-based table sessions and real-time order management. Designed strictly for on-premise dine-in (no advance/remote booking).
 
 **Three role-based panels:** Customer · Manager · Admin
 
@@ -43,7 +43,6 @@ The frontend was **migrated from server-rendered EJS templates to a Next.js (Rea
 |-------|-----------|
 | **Frontend** | Next.js 15 (App Router), React, TypeScript, CSS Modules |
 | **Backend** | Node.js, Express.js, MongoDB (Mongoose-free, native driver) |
-| **AI/ML** | Python, FastAPI, Linear Regression, Random Forest |
 | **Deployment** | Render (frontend + backend as separate services) |
 | **Auth** | JWT access tokens (15 min) + rotating refresh tokens (7 days), httpOnly cookies |
 
@@ -87,18 +86,7 @@ The frontend was **migrated from server-rendered EJS templates to a Next.js (Rea
 - CRUD: menu items & tables
 - View all bookings with active/expired status
 - Manage managers & admins (create, vacate)
-- **AI Analytics:** weekly revenue/expense/profit trends with ML predictions
 - **End-of-Day Reset:** clears all bookings, orders & sessions
-
----
-
-## AI-Powered Analytics
-
-The admin panel includes an ML-driven analytics dashboard:
-- Trained on historical weekly sales data
-- **Models:** Linear Regression + Random Forest Regressor
-- **Predicts:** next-week revenue, expenses, profit
-- Served via Python FastAPI microservice
 
 ---
 
@@ -125,7 +113,6 @@ my_restaurant/
 │   ├── components/           # Reusable UI components
 │   ├── utils/                # API client functions
 │   └── styles/               # Theme & global styles
-└── future_trends/            # Python FastAPI ML service
 ```
 
 ---
@@ -141,11 +128,6 @@ npm run dev          # Starts Express on :5000
 cd frontend
 npm install
 npm run dev          # Starts Next.js on :3000
-
-# AI Service (optional)
-cd future_trends
-pip install -r requirements.txt
-uvicorn app:app --port 8000
 
 # End-to-end security suite (boots the real API on an in-memory MongoDB)
 npm run test:security
@@ -189,9 +171,6 @@ Two separate Render Web Services from the same GitHub repo:
 | Backend | `NODE_ENV` | `production` |
 | Backend | `JWT_SECRET` | 48+ random characters (never reuse the old `SESSION_SECRET`) |
 | Backend | `FRONTEND_URL` | `https://your-frontend.onrender.com` |
-| Backend | `AI_SERVICE_URL` | `https://your-ai-service.onrender.com` (optional) |
-| Backend | `AI_SERVICE_TOKEN` | shared secret, also set on the AI service (optional) |
-| Backend | `RESTAURANT_COST_RATIO` | `0.65` — expense estimate used by the forecast (optional) |
 | Frontend | `NEXT_PUBLIC_API_URL` | `https://your-backend.onrender.com` |
 
 ---
@@ -205,6 +184,5 @@ Two separate Render Web Services from the same GitHub repo:
 - JWT auth for all three panels: 15-minute access token + rotating refresh token
 - 65-check end-to-end security suite (`npm run test:security`) covering CSRF, JWT forgery,
   refresh replay, NoSQL injection, price tampering, IDOR and booking/checkout races
-- AI-powered business analytics with ML predictions
 - Payment-gateway-ready architecture
 - End-of-day reset for data cleanliness

@@ -53,6 +53,3 @@ export const createAdmin = (username: string, password: string) =>
 
 // Reset
 export const endOfDayReset = () => post("/reset");
-
-// AI Analysis
-export const fetchAiAnalysis = () => get("/ai-analysis");

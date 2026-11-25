@@ -123,12 +123,6 @@ export default function AdminDashboardPage() {
               <p>View occupied &amp; vacant tables</p>
             </Link>
 
-            <Link href="/admin/ai-analysis" className={styles.actionCard}>
-              <span className={styles.actionEmoji}>📈</span>
-              <h3>AI Growth Analysis</h3>
-              <p>AI-powered growth trends</p>
-            </Link>
-
             <Link href="/admin/managers" className={styles.actionCard}>
               <span className={styles.actionEmoji}>👥</span>
               <h3>Manage Staff</h3>
