@@ -3,63 +3,64 @@ const router = express.Router();
 
 const managerModel = require("../../models/manager");
 const ordersModel = require("../../models/orders");
+const { resolveUser, requireRole } = require("../../middleware/auth");
+const { startStaffSession, endStaffSession } = require("../../auth/staffAuth");
+const validate = require("../../utils/validate");
+const { AuthError, ConflictError } = require("../../utils/errors");
 
 // ─── Auth ────────────────────────────────────────────────
 
 router.post("/login", async (req, res) => {
-  try {
-    const { username, password } = req.body;
+    const username = validate.username(req.body && req.body.username);
+    const password = validate.loginPassword(req.body && req.body.password);
+
     const manager = await managerModel.findManagerByUsername(username);
-    if (!manager) return res.status(401).json({ error: "Invalid credentials" });
+    if (!manager) throw new AuthError("Invalid credentials");
 
     const valid = await managerModel.verifyPassword(manager, password);
-    if (!valid) return res.status(401).json({ error: "Invalid credentials" });
+    if (!valid) throw new AuthError("Invalid credentials");
 
-    req.session.manager = true;
+    await startStaffSession(res, {
+        id: manager._id,
+        role: "manager",
+        username: manager.username,
+        tokenVersion: manager.tokenVersion || 0
+    });
+
     res.json({ success: true, manager: { username: manager.username } });
-  } catch (err) {
-    console.error("Manager API login error:", err);
-    res.status(500).json({ error: "Login failed" });
-  }
 });
 
-router.get("/session", (req, res) => {
-  if (req.session && req.session.manager === true) {
-    return res.json({ authenticated: true });
-  }
-  res.json({ authenticated: false });
+router.get("/session", async (req, res) => {
+    const user = await resolveUser(req);
+    if (user && user.role === "manager") {
+        return res.json({ authenticated: true, manager: { username: user.username } });
+    }
+    res.json({ authenticated: false });
 });
 
-router.post("/logout", (req, res) => {
-  req.session.manager = false;
-  res.json({ success: true });
+router.post("/logout", async (req, res) => {
+    await endStaffSession(req, res);
+    res.json({ success: true });
 });
 
 // ─── Guard ───────────────────────────────────────────────
-router.use((req, res, next) => {
-  if (req.session && req.session.manager) return next();
-  res.status(403).json({ error: "Not authenticated" });
-});
+router.use(requireRole("manager"));
 
 // ─── Orders ──────────────────────────────────────────────
 router.get("/orders", async (req, res) => {
-  try {
     const orders = await ordersModel.getAllOrders();
     res.json({ orders });
-  } catch (err) {
-    res.status(500).json({ error: "Failed to load orders" });
-  }
 });
 
-// ─── Accept Order ────────────────────────────────────────
 router.post("/acceptOrder", async (req, res) => {
-  try {
-    const { orderId } = req.body;
-    await ordersModel.updateOrderStatus(orderId, "ACCEPTED");
+    const orderId = validate.objectId(req.body && req.body.orderId, { field: "orderId" });
+
+    const result = await ordersModel.acceptOrder(orderId);
+    if (result.matchedCount === 0) {
+        throw new ConflictError("Order not found or already accepted");
+    }
+
     res.json({ success: true });
-  } catch (err) {
-    res.status(500).json({ error: "Failed to accept order" });
-  }
 });
 
 module.exports = router;

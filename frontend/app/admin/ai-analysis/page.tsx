@@ -31,8 +31,8 @@ export default function AdminAiAnalysisPage() {
   }, []);
 
   const trendColor = (t: string) => {
-    if (t === "up") return styles.badgeGreen;
-    if (t === "down") return styles.badgeRed;
+    if (t.startsWith("up")) return styles.badgeGreen;
+    if (t.startsWith("down")) return styles.badgeRed;
     return styles.badgeYellow;
   };
 

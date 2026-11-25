@@ -3,72 +3,86 @@ const { getDb } = require("../data/database");
 
 const COLLECTION = "tables";
 
-// -------------------- EXISTING FUNCTIONS (DO NOT CHANGE) --------------------
-
-// Add new table
 const addTable = async (tableData) => {
     const db = getDb();
-    return await db.collection(COLLECTION).insertOne({
+    return db.collection(COLLECTION).insertOne({
         tableNumber: tableData.tableNumber,
         capacity: tableData.capacity,
-        isVacant: true
+        isVacant: true,
+        createdAt: new Date()
     });
 };
 
-// Delete table
 const deleteTable = async (id) => {
     const db = getDb();
-    return await db.collection(COLLECTION).deleteOne({
+    return db.collection(COLLECTION).deleteOne({
         _id: new ObjectId(id)
     });
 };
 
-// Get one vacant table
 const getVacantTable = async () => {
     const db = getDb();
-    return await db.collection(COLLECTION).findOne({
-        isVacant: true
-    });
+    return db.collection(COLLECTION).findOne({ isVacant: true });
 };
 
-// Mark table as occupied
 const markTableOccupied = async (tableId) => {
     const db = getDb();
-    return await db.collection(COLLECTION).updateOne(
+    return db.collection(COLLECTION).updateOne(
         { _id: new ObjectId(tableId) },
         { $set: { isVacant: false } }
     );
 };
 
-// Get vacant table with required capacity
+/**
+ * Look up a table by number only when it is vacant.
+ * Admin "booking status" derivation uses this as a vacancy probe.
+ */
 const getTableByTableNumber = async (tableNumber) => {
     const db = getDb();
-    return await db.collection(COLLECTION).findOne({
+    return db.collection(COLLECTION).findOne({
         isVacant: true,
         tableNumber: Number(tableNumber)
     });
 };
 
-// -------------------- NEW FUNCTIONS (ADMIN CRUD ONLY) --------------------
-
-// Get all tables (admin view)
-const getAllTables = async () => {
+/**
+ * Atomically claim a vacant table.
+ *
+ * findOne + updateOne is a race: two customers can both observe the table as
+ * vacant. A single conditional findOneAndUpdate guarantees exactly one winner.
+ */
+const claimVacantTable = async (tableNumber) => {
     const db = getDb();
-    return await db.collection(COLLECTION).find({}).toArray();
+    return db.collection(COLLECTION).findOneAndUpdate(
+        { tableNumber: Number(tableNumber), isVacant: true },
+        { $set: { isVacant: false, occupiedAt: new Date() } },
+        { returnDocument: "after" }
+    );
 };
 
-// Get table by ID (admin edit)
+const releaseTable = async (tableId) => {
+    const db = getDb();
+    return db.collection(COLLECTION).updateOne(
+        { _id: new ObjectId(tableId) },
+        { $set: { isVacant: true }, $unset: { occupiedAt: "" } }
+    );
+};
+
+const getAllTables = async () => {
+    const db = getDb();
+    return db.collection(COLLECTION).find({}).sort({ tableNumber: 1 }).toArray();
+};
+
 const getTableById = async (id) => {
     const db = getDb();
-    return await db.collection(COLLECTION).findOne({
+    return db.collection(COLLECTION).findOne({
         _id: new ObjectId(id)
     });
 };
 
-// Update table details (admin edit)
 const updateTable = async (id, tableNumber, capacity, isVacant) => {
     const db = getDb();
-    return await db.collection(COLLECTION).updateOne(
+    return db.collection(COLLECTION).updateOne(
         { _id: new ObjectId(id) },
         {
             $set: {
@@ -80,36 +94,32 @@ const updateTable = async (id, tableNumber, capacity, isVacant) => {
     );
 };
 
-// Mark table as vacant (after customer leaves)
 const markTableVacant = async (tableId) => {
     const db = getDb();
-    return await db.collection(COLLECTION).updateOne(
+    return db.collection(COLLECTION).updateOne(
         { _id: new ObjectId(tableId) },
-        { $set: { isVacant: true } }
+        { $set: { isVacant: true }, $unset: { occupiedAt: "" } }
     );
 };
 
-// Set all tables to vacant (end of day reset)
 const markAllTablesVacant = async () => {
     const db = getDb();
-    return await db.collection(COLLECTION).updateMany(
+    return db.collection(COLLECTION).updateMany(
         {},
-        { $set: { isVacant: true } }
+        { $set: { isVacant: true }, $unset: { occupiedAt: "" } }
     );
 };
 
-
-
 module.exports = {
-    // existing exports
     addTable,
     deleteTable,
     getVacantTable,
     markTableOccupied,
     getTableByTableNumber,
+    claimVacantTable,
+    releaseTable,
     markTableVacant,
 
-    // new admin exports
     getAllTables,
     getTableById,
     updateTable,

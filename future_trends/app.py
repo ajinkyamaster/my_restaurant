@@ -25,7 +25,7 @@ def predict(data: dict):
     predicted_profit = int(profit_model.predict(df)[0])
 
     # Trend logic
-    trend = "upward" if predicted_profit > data["profit"] else "downward"
+    trend = "up" if predicted_profit > data["profit"] else "down"
 
     # Simple insights
     insights = []

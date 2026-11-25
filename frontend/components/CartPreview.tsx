@@ -3,7 +3,7 @@
 import Link from "next/link";
 import styles from "./CartPreview.module.css";
 
-interface CartItem { item: string; quantity: number; price: number; totalPrice: number; }
+interface CartItem { menuItemId: string; item: string; quantity: number; price: number; totalPrice: number; }
 
 interface CartPreviewProps {
   items: CartItem[];
@@ -38,7 +38,7 @@ export default function CartPreview({
           <>
             <ul className={styles.items}>
               {items.map((ci) => (
-                <li key={ci.item} className={styles.item}>
+                <li key={ci.menuItemId} className={styles.item}>
                   <div className={styles.itemInfo}>
                     <span className={styles.itemName}>{ci.item}</span>
                     <span className={styles.itemQty}>×{ci.quantity}</span>

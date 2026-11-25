@@ -5,12 +5,13 @@ import Image from "next/image";
 import styles from "./MenuCard.module.css";
 
 interface MenuCardProps {
+  id: string;
   name: string;
   price: number;
-  onAdd: (name: string, quantity: number, price: number) => void;
+  onAdd: (menuItemId: string, name: string, quantity: number) => void;
 }
 
-export default function MenuCard({ name, price, onAdd }: MenuCardProps) {
+export default function MenuCard({ id, name, price, onAdd }: MenuCardProps) {
   const [qty, setQty] = useState(1);
   const [adding, setAdding] = useState(false);
 
@@ -18,7 +19,7 @@ export default function MenuCard({ name, price, onAdd }: MenuCardProps) {
 
   const handleAdd = async () => {
     setAdding(true);
-    await onAdd(name, qty, price);
+    await onAdd(id, name, qty);
     setAdding(false);
     setQty(1);
   };

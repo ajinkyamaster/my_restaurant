@@ -15,7 +15,7 @@ interface Order {
   _id: string;
   tableNumber: number;
   items: OrderItem[];
-  totalAmount: number;
+  grandTotal: number;
   status: string;
   orderedAt: string;
 }
@@ -142,7 +142,7 @@ export default function ManagerDashboardPage() {
                 </div>
                 <div className={styles.orderFooter}>
                   <span className={styles.orderTotal}>
-                    Total: ₹{order.totalAmount || 0}
+                    Total: ₹{order.grandTotal || 0}
                   </span>
                   <span className={styles.orderTime}>
                     {new Date(order.orderedAt).toLocaleTimeString()}

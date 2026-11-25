@@ -10,7 +10,7 @@ import { fetchMenu, addToCart, fetchCart } from "@/utils/api";
 import styles from "./page.module.css";
 
 interface MenuItem { _id: string; name: string; price: number; }
-interface CartItem { item: string; quantity: number; price: number; totalPrice: number; }
+interface CartItem { menuItemId: string; item: string; quantity: number; price: number; totalPrice: number; }
 
 export default function MenuPage() {
   const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
@@ -47,9 +47,9 @@ export default function MenuPage() {
     }
   };
 
-  const handleAddToCart = async (name: string, quantity: number, price: number) => {
+  const handleAddToCart = async (menuItemId: string, name: string, quantity: number) => {
     try {
-      const data = await addToCart(name, quantity, price);
+      const data = await addToCart(menuItemId, quantity);
       setCartItems(data.cart);
       setCartTotal(data.grandTotal);
       showToast(`${name} added to cart!`);
@@ -105,6 +105,7 @@ export default function MenuPage() {
                 {menuItems.map((item, i) => (
                   <ScrollReveal key={item._id} delay={i * 60}>
                     <MenuCard
+                      id={item._id}
                       name={item.name}
                       price={item.price}
                       onAdd={handleAddToCart}

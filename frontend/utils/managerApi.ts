@@ -1,35 +1,23 @@
-const BASE = (process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000").replace(/\/+$/, "");
-const MANAGER_API = `${BASE}/api/manager`;
+import { request } from "./http";
 
-async function request(endpoint, options = {}) {
-  const { headers, ...rest } = options;
-  const res = await fetch(`${MANAGER_API}${endpoint}`, {
-    credentials: "include",
-    ...rest,
-    headers: { "Content-Type": "application/json", ...headers },
+const MANAGER_API = "/api/manager";
+
+const get = (endpoint: string) => request(MANAGER_API, endpoint);
+
+const post = (endpoint: string, data?: unknown) =>
+  request(MANAGER_API, endpoint, {
+    method: "POST",
+    body: data === undefined ? undefined : JSON.stringify(data),
   });
 
-  if (!res.ok) {
-    const body = await res.json().catch(() => ({}));
-    throw new Error(body.error || `Request failed (${res.status})`);
-  }
-
-  return res.json();
-}
-
-function post(endpoint, data) {
-  return request(endpoint, { method: "POST", body: JSON.stringify(data) });
-}
-
 // Auth
-export const managerLogin = (username, password) =>
+export const managerLogin = (username: string, password: string) =>
   post("/login", { username, password });
 export const managerLogout = () => post("/logout");
-export const fetchManagerSession = () => request("/session");
+export const fetchManagerSession = () => get("/session");
 
 // Dashboard (orders)
-export const fetchManagerOrders = () => request("/orders");
+export const fetchManagerOrders = () => get("/orders");
 
 // Accept order
-export const acceptOrder = (orderId) =>
-  post("/acceptOrder", { orderId });
+export const acceptOrder = (orderId: string) => post("/acceptOrder", { orderId });

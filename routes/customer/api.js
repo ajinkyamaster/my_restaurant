@@ -1,7 +1,6 @@
 const express = require("express");
 const router = express.Router();
 
-// ─── Import controllers ─────────────────────────────────
 const { apiGetMenu, apiGetSession } = require("../../controllers/baseController");
 const {
     apiGetCart,
@@ -24,8 +23,8 @@ router.get("/session", apiGetSession);
 
 // ─── Cart ────────────────────────────────────────────────
 router.get("/cart", apiGetCart);
-router.post("/cart/add", postAddToCart);         // already returns JSON
-router.post("/cart/remove", postRemoveFromCart);  // already returns JSON
+router.post("/cart/add", postAddToCart);
+router.post("/cart/remove", postRemoveFromCart);
 router.post("/cart/update", apiUpdateCartItem);
 
 // ─── Orders ──────────────────────────────────────────────

@@ -1,20 +1,23 @@
 const tablesModel = require("../../models/tables");
-const { destroyTableSession } = require("../../session/session-config");
+const tableSessions = require("../../models/tableSessions");
+const { getTableSession, endTableSession } = require("../../services/tableSession");
 
-// ─── API: POST /api/endSession ─── End session (JSON)
 async function apiEndSession(req, res) {
-    if (!req.session.table) {
+    const session = await getTableSession(req);
+    if (!session) {
         return res.json({ success: true, message: "No active session" });
     }
-    try {
-        const tableId = req.session.table.tableId;
-        await tablesModel.markTableVacant(tableId);
-        await destroyTableSession(req);
-        res.json({ success: true });
-    } catch (err) {
-        console.error("API: End session failed", err);
-        res.status(500).json({ error: "Failed to end session" });
+
+    await endTableSession(res, session);
+
+    // Only free the table when this was the last active session for it. A stale
+    // session must never vacate a table a new party has since booked.
+    const remaining = await tableSessions.countActiveForTable(session.tableId, session._id);
+    if (remaining === 0) {
+        await tablesModel.markTableVacant(session.tableId);
     }
+
+    res.json({ success: true });
 }
 
 module.exports = {

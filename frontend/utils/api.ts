@@ -1,50 +1,40 @@
-const BASE = (process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000").replace(/\/+$/, "");
-const API = `${BASE}/api`;
+import { request } from "./http";
 
-async function request(endpoint, options = {}) {
-  const { headers, ...rest } = options;
-  const res = await fetch(`${API}${endpoint}`, {
-    credentials: "include",
-    ...rest,
-    headers: { "Content-Type": "application/json", ...headers },
+const API = "/api";
+
+const get = (endpoint: string) => request(API, endpoint);
+
+const post = (endpoint: string, data?: unknown) =>
+  request(API, endpoint, {
+    method: "POST",
+    body: data === undefined ? undefined : JSON.stringify(data),
   });
 
-  if (!res.ok) {
-    const body = await res.json().catch(() => ({}));
-    throw new Error(body.error || `Request failed (${res.status})`);
-  }
-
-  return res.json();
-}
-
-function post(endpoint, data) {
-  return request(endpoint, { method: "POST", body: JSON.stringify(data) });
-}
-
 // Menu
-export const fetchMenu = () => request("/menu");
+export const fetchMenu = () => get("/menu");
 
 // Session
-export const fetchSession = () => request("/session");
+export const fetchSession = () => get("/session");
 export const endSession = () => post("/endSession");
 
-// Cart
-export const fetchCart = () => request("/cart");
-export const addToCart = (item, quantity, price) =>
-  post("/cart/add", { item, quantity, price });
-export const removeFromCart = (item) => post("/cart/remove", { item });
-export const updateCartItem = (item, quantity, price) =>
-  post("/cart/update", { item, quantity, price });
+// Cart — prices are resolved server-side from the menu, never sent by the client.
+export const fetchCart = () => get("/cart");
+export const addToCart = (menuItemId: string, quantity: number) =>
+  post("/cart/add", { menuItemId, quantity });
+export const removeFromCart = (menuItemId: string) =>
+  post("/cart/remove", { menuItemId });
+export const updateCartItem = (menuItemId: string, quantity: number) =>
+  post("/cart/update", { menuItemId, quantity });
 
 // Orders
-export const fetchOrders = () => request("/orders");
+export const fetchOrders = () => get("/orders");
 
 // Payments
-export const fetchPaymentSummary = () => request("/payments");
-export const fetchMyPayments = () => request("/myPayments");
+export const fetchPaymentSummary = () => get("/payments");
+export const fetchMyPayments = () => get("/myPayments");
 export const processCheckout = () => post("/checkout");
 
 // Tables & Booking
-export const fetchTables = () => request("/tables");
-export const bookTable = (name, tableNumber) =>
+export const fetchTables = () => get("/tables");
+export const bookTable = (name: string, tableNumber: number) =>
   post("/bookTable", { name, tableNumber });

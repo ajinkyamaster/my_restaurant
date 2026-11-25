@@ -8,272 +8,291 @@ const tablesModel = require("../../models/tables");
 const bookingsModel = require("../../models/bookings");
 const ordersModel = require("../../models/orders");
 const managerModel = require("../../models/manager");
+const tableSessions = require("../../models/tableSessions");
+
+const { resolveUser, requireRole } = require("../../middleware/auth");
+const { startStaffSession, endStaffSession } = require("../../auth/staffAuth");
+const validate = require("../../utils/validate");
+const { AuthError, NotFoundError, ConflictError } = require("../../utils/errors");
+
+const AI_SERVICE_URL = (process.env.AI_SERVICE_URL || "http://localhost:8000").replace(/\/+$/, "");
+const AI_TIMEOUT_MS = 3000;
 
 // ─── Auth ────────────────────────────────────────────────
 
 router.post("/login", async (req, res) => {
-  try {
-    const { username, password } = req.body;
-    const admin = await adminModel.findAdminByUsername(username);
-    if (!admin) return res.status(401).json({ error: "Invalid credentials" });
+  const username = validate.username(req.body && req.body.username);
+  const password = validate.loginPassword(req.body && req.body.password);
 
-    const valid = await bcrypt.compare(password, admin.password);
-    if (!valid) return res.status(401).json({ error: "Invalid credentials" });
+  const admin = await adminModel.findAdminByUsername(username);
+  if (!admin) throw new AuthError("Invalid credentials");
 
-    req.session.admin = true;
-    req.session.adminUser = { id: admin._id, username: admin.username };
-    res.json({ success: true, admin: { username: admin.username } });
-  } catch (err) {
-    console.error("Admin API login error:", err);
-    res.status(500).json({ error: "Login failed" });
-  }
+  const valid = await bcrypt.compare(password, admin.password);
+  if (!valid) throw new AuthError("Invalid credentials");
+
+  await startStaffSession(res, {
+    id: admin._id,
+    role: "admin",
+    username: admin.username,
+    tokenVersion: admin.tokenVersion || 0
+  });
+
+  res.json({ success: true, admin: { username: admin.username } });
 });
 
-router.get("/session", (req, res) => {
-  if (req.session && req.session.admin === true) {
-    return res.json({ authenticated: true, admin: req.session.adminUser });
+router.get("/session", async (req, res) => {
+  const user = await resolveUser(req);
+  if (user && user.role === "admin") {
+    return res.json({ authenticated: true, admin: { id: user.id, username: user.username } });
   }
   res.json({ authenticated: false });
 });
 
-router.post("/logout", (req, res) => {
-  req.session.admin = false;
-  req.session.adminUser = null;
+router.post("/logout", async (req, res) => {
+  await endStaffSession(req, res);
   res.json({ success: true });
 });
 
 // ─── Guard middleware for everything below ───────────────
-router.use((req, res, next) => {
-  if (req.session && req.session.admin === true) return next();
-  res.status(403).json({ error: "Not authenticated" });
-});
+router.use(requireRole("admin"));
 
 // ─── Dashboard ───────────────────────────────────────────
 router.get("/dashboard", async (req, res) => {
-  try {
-    const [tables, menuItems, bookings, orders, managers] = await Promise.all([
-      tablesModel.getAllTables(),
-      menuModel.getAllMenuItems(),
-      bookingsModel.getAllBookings(),
-      ordersModel.getAllOrders(),
-      managerModel.getAllManagers(),
-    ]);
-    const occupiedTables = tables.filter((t) => !t.isVacant).length;
-    const totalRevenue = orders.reduce((sum, o) => sum + (o.totalAmount || 0), 0);
-    res.json({
-      admin: req.session.adminUser,
-      stats: {
-        totalTables: tables.length,
-        occupiedTables,
-        totalMenuItems: menuItems.length,
-        totalBookings: bookings.length,
-        totalOrders: orders.length,
-        totalManagers: managers.length,
-        totalRevenue,
-      },
-    });
-  } catch (err) {
-    console.error("Dashboard API error:", err);
-    res.status(500).json({ error: "Failed to load dashboard" });
-  }
+  const [tables, menuItems, bookings, orders, managers] = await Promise.all([
+    tablesModel.getAllTables(),
+    menuModel.getAllMenuItems(),
+    bookingsModel.getAllBookings(),
+    ordersModel.getAllOrders(),
+    managerModel.getAllManagers()
+  ]);
+
+  const occupiedTables = tables.filter((t) => !t.isVacant).length;
+
+  // Orders store `grandTotal`. Reading a non-existent `totalAmount` reported ₹0.
+  const totalRevenue = orders.reduce((sum, order) => sum + (Number(order.grandTotal) || 0), 0);
+
+  res.json({
+    admin: { id: req.user.id, username: req.user.username },
+    stats: {
+      totalTables: tables.length,
+      occupiedTables,
+      totalMenuItems: menuItems.length,
+      totalBookings: bookings.length,
+      totalOrders: orders.length,
+      totalManagers: managers.length,
+      totalRevenue: Math.round(totalRevenue * 100) / 100
+    }
+  });
 });
 
 // ─── Menu ────────────────────────────────────────────────
 router.get("/menu", async (req, res) => {
-  try {
-    const menuItems = await menuModel.getAllMenuItems();
-    res.json({ menuItems });
-  } catch (err) {
-    res.status(500).json({ error: "Failed to load menu" });
-  }
+  const menuItems = await menuModel.getAllMenuItems();
+  res.json({ menuItems });
 });
 
 router.post("/menu", async (req, res) => {
-  try {
-    const { name, price } = req.body;
-    await menuModel.addMenuItem(name, parseFloat(price));
-    res.json({ success: true });
-  } catch (err) {
-    res.status(500).json({ error: "Failed to add menu item" });
-  }
+  const name = validate.str(req.body && req.body.name, { field: "name", min: 1, max: 80 });
+  const price = validate.money(req.body && req.body.price, { field: "price", min: 0.01 });
+
+  await menuModel.addMenuItem(name, price);
+  res.json({ success: true });
 });
 
 router.post("/menu/update", async (req, res) => {
-  try {
-    const { id, name, price } = req.body;
-    await menuModel.updateMenuItem(id, name, parseFloat(price));
-    res.json({ success: true });
-  } catch (err) {
-    res.status(500).json({ error: "Failed to update menu item" });
-  }
+  const id = validate.objectId(req.body && req.body.id);
+  const name = validate.str(req.body && req.body.name, { field: "name", min: 1, max: 80 });
+  const price = validate.money(req.body && req.body.price, { field: "price", min: 0.01 });
+
+  const result = await menuModel.updateMenuItem(id, name, price);
+  if (result.matchedCount === 0) throw new NotFoundError("Menu item not found");
+
+  res.json({ success: true });
 });
 
 router.post("/menu/delete", async (req, res) => {
-  try {
-    const { id } = req.body;
-    await menuModel.deleteMenuItem(id);
-    res.json({ success: true });
-  } catch (err) {
-    res.status(500).json({ error: "Failed to delete menu item" });
-  }
+  const id = validate.objectId(req.body && req.body.id);
+
+  const result = await menuModel.deleteMenuItem(id);
+  if (result.deletedCount === 0) throw new NotFoundError("Menu item not found");
+
+  res.json({ success: true });
 });
 
 // ─── Tables ──────────────────────────────────────────────
 router.get("/tables", async (req, res) => {
-  try {
-    const tables = await tablesModel.getAllTables();
-    res.json({ tables });
-  } catch (err) {
-    res.status(500).json({ error: "Failed to load tables" });
-  }
+  const tables = await tablesModel.getAllTables();
+  res.json({ tables });
 });
 
 router.post("/tables", async (req, res) => {
-  try {
-    const { tableNumber, capacity } = req.body;
-    await tablesModel.addTable({ tableNumber: parseInt(tableNumber), capacity: parseInt(capacity) });
-    res.json({ success: true });
-  } catch (err) {
-    res.status(500).json({ error: "Failed to add table" });
+  const tableNumber = validate.int(req.body && req.body.tableNumber, {
+    field: "tableNumber",
+    min: 1,
+    max: 9999
+  });
+  const capacity = validate.int(req.body && req.body.capacity, {
+    field: "capacity",
+    min: 1,
+    max: 100
+  });
+
+  const existing = await tablesModel.getAllTables();
+  if (existing.some((t) => t.tableNumber === tableNumber)) {
+    throw new ConflictError(`Table ${tableNumber} already exists`);
   }
+
+  await tablesModel.addTable({ tableNumber, capacity });
+  res.json({ success: true });
 });
 
 router.post("/tables/update", async (req, res) => {
-  try {
-    const { id, tableNumber, capacity, isVacant } = req.body;
-    await tablesModel.updateTable(id, parseInt(tableNumber), parseInt(capacity), isVacant);
-    res.json({ success: true });
-  } catch (err) {
-    res.status(500).json({ error: "Failed to update table" });
-  }
+  const id = validate.objectId(req.body && req.body.id);
+  const tableNumber = validate.int(req.body && req.body.tableNumber, {
+    field: "tableNumber",
+    min: 1,
+    max: 9999
+  });
+  const capacity = validate.int(req.body && req.body.capacity, {
+    field: "capacity",
+    min: 1,
+    max: 100
+  });
+  const isVacant = validate.boolean(req.body && req.body.isVacant, { field: "isVacant" });
+
+  const result = await tablesModel.updateTable(id, tableNumber, capacity, isVacant);
+  if (result.matchedCount === 0) throw new NotFoundError("Table not found");
+
+  res.json({ success: true });
 });
 
 router.post("/tables/delete", async (req, res) => {
-  try {
-    const { id } = req.body;
-    await tablesModel.deleteTable(id);
-    res.json({ success: true });
-  } catch (err) {
-    res.status(500).json({ error: "Failed to delete table" });
-  }
+  const id = validate.objectId(req.body && req.body.id);
+
+  const result = await tablesModel.deleteTable(id);
+  if (result.deletedCount === 0) throw new NotFoundError("Table not found");
+
+  res.json({ success: true });
 });
 
 // ─── Bookings ────────────────────────────────────────────
 router.get("/bookings", async (req, res) => {
-  try {
-    const bookings = await bookingsModel.getAllBookings();
-    const bookingsWithStatus = await Promise.all(
-      bookings.map(async (b) => {
-        const vacantTable = await tablesModel.getTableByTableNumber(b.tableNumber);
-        return { ...b, status: vacantTable ? "Booking Expired" : "Booking Active" };
-      })
-    );
-    res.json({ bookings: bookingsWithStatus });
-  } catch (err) {
-    res.status(500).json({ error: "Failed to load bookings" });
-  }
+  const bookings = await bookingsModel.getAllBookings();
+  const tables = await tablesModel.getAllTables();
+  const occupied = new Set(
+    tables.filter((t) => !t.isVacant).map((t) => t.tableNumber)
+  );
+
+  const bookingsWithStatus = bookings.map((booking) => ({
+    ...booking,
+    status: occupied.has(booking.tableNumber) ? "Booking Active" : "Booking Expired"
+  }));
+
+  res.json({ bookings: bookingsWithStatus });
 });
 
 // ─── Managers ────────────────────────────────────────────
 router.get("/managers", async (req, res) => {
-  try {
-    const managers = await managerModel.getAllManagers();
-    const safe = managers.map(({ password, ...m }) => m);
-    res.json({ managers: safe });
-  } catch (err) {
-    res.status(500).json({ error: "Failed to load managers" });
-  }
+  const managers = await managerModel.getAllManagers();
+  res.json({ managers });
 });
 
 router.post("/managers/create", async (req, res) => {
-  try {
-    const { username, password } = req.body;
-    const existing = await managerModel.findManagerByUsername(username);
-    if (existing) return res.status(409).json({ error: "Manager already exists" });
-    await managerModel.createManager(username, password);
-    res.json({ success: true });
-  } catch (err) {
-    res.status(500).json({ error: "Failed to create manager" });
-  }
+  const username = validate.username(req.body && req.body.username);
+  const password = validate.password(req.body && req.body.password);
+
+  const existing = await managerModel.findManagerByUsername(username);
+  if (existing) throw new ConflictError("Manager already exists");
+
+  await managerModel.createManager(username, password);
+  res.json({ success: true });
 });
 
 router.post("/managers/vacate", async (req, res) => {
-  try {
-    const { username } = req.body;
-    const mgr = await managerModel.findManagerByUsername(username);
-    if (!mgr) return res.status(404).json({ error: "Manager not found" });
-    await managerModel.vacateManager(username);
-    res.json({ success: true });
-  } catch (err) {
-    res.status(500).json({ error: "Failed to vacate manager" });
-  }
+  const username = validate.username(req.body && req.body.username);
+
+  const manager = await managerModel.findManagerByUsername(username);
+  if (!manager) throw new NotFoundError("Manager not found");
+
+  // Deleting the record revokes their tokens: the auth middleware re-loads the
+  // manager by id on every request and fails closed.
+  await managerModel.vacateManager(username);
+  res.json({ success: true });
 });
 
 router.post("/admins/create", async (req, res) => {
-  try {
-    const { username, password } = req.body;
-    const existing = await adminModel.findAdminByUsername(username);
-    if (existing) return res.status(409).json({ error: "Admin already exists" });
-    await adminModel.createAdmin({ username, password });
-    res.json({ success: true });
-  } catch (err) {
-    res.status(500).json({ error: "Failed to create admin" });
-  }
+  const username = validate.username(req.body && req.body.username);
+  const password = validate.password(req.body && req.body.password);
+
+  const existing = await adminModel.findAdminByUsername(username);
+  if (existing) throw new ConflictError("Admin already exists");
+
+  await adminModel.createAdmin({ username, password });
+  res.json({ success: true });
 });
 
 // ─── Reset ───────────────────────────────────────────────
 router.post("/reset", async (req, res) => {
-  try {
-    await bookingsModel.clearAllBookings();
-    await tablesModel.markAllTablesVacant();
-    await ordersModel.clearAllOrders();
-    res.json({ success: true });
-  } catch (err) {
-    res.status(500).json({ error: "Reset failed" });
-  }
+  await bookingsModel.clearAllBookings();
+  await tablesModel.markAllTablesVacant();
+  await ordersModel.clearAllOrders();
+  // Drop open dine-in sessions too, otherwise a stale customer session keeps
+  // ordering into the "new day" and can vacate a table someone else just took.
+  await tableSessions.clearAll();
+  res.json({ success: true });
 });
 
 // ─── AI Analysis ─────────────────────────────────────────
 router.get("/ai-analysis", async (req, res) => {
-  try {
-    const currentWeekData = {
-      week_revenue: 275000,
-      week_orders: 350,
-      avg_order_value: 785,
-      total_expense: 175000,
-      profit: 100000,
-      off_days: 0,
-    };
+  const currentWeekData = {
+    week_revenue: 275000,
+    week_orders: 350,
+    avg_order_value: 785,
+    total_expense: 175000,
+    profit: 100000,
+    off_days: 0
+  };
 
-    const aiResponse = await fetch("http://localhost:8000/predict", {
+  const history = [
+    { week: "W-1", revenue: 275000, total_expense: 200000 },
+    { week: "W-2", revenue: 270000, total_expense: 280000 },
+    { week: "W-3", revenue: 300000, total_expense: 200000 },
+    { week: "W-4", revenue: 280000, total_expense: 220000 }
+  ];
+
+  try {
+    const aiResponse = await fetch(`${AI_SERVICE_URL}/predict`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(currentWeekData),
+      signal: AbortSignal.timeout(AI_TIMEOUT_MS)
     });
 
-    if (!aiResponse.ok) throw new Error("AI service unavailable");
+    if (!aiResponse.ok) throw new Error(`AI service responded ${aiResponse.status}`);
     const aiData = await aiResponse.json();
 
-    const history = [
-      { week: "W-1", revenue: 275000, total_expense: 200000 },
-      { week: "W-2", revenue: 270000, total_expense: 280000 },
-      { week: "W-3", revenue: 300000, total_expense: 200000 },
-      { week: "W-4", revenue: 280000, total_expense: 220000 },
-    ];
+    // The panel compares against "up"/"down"; the service used to return
+    // "upward"/"downward", which made the badge permanently yellow.
+    const trend =
+      aiData.trend === "upward" ? "up" : aiData.trend === "downward" ? "down" : aiData.trend;
 
     res.json({
+      available: true,
       history,
+      currentWeek: currentWeekData,
       prediction: { revenue: aiData.predicted_revenue, profit: aiData.predicted_profit },
-      trend: aiData.trend,
-      insights: aiData.insights,
+      trend,
+      insights: Array.isArray(aiData.insights) ? aiData.insights : []
     });
   } catch (err) {
-    console.error("AI Analysis API error:", err);
+    console.error("AI analysis unavailable:", err.message);
     res.json({
-      history: [],
+      available: false,
+      history,
+      currentWeek: currentWeekData,
       prediction: { revenue: 0, profit: 0 },
       trend: "unknown",
-      insights: ["AI service temporarily unavailable"],
+      insights: ["AI service is unavailable — no prediction was generated."]
     });
   }
 });

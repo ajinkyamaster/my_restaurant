@@ -11,7 +11,7 @@ import {
 } from "@/utils/api";
 import styles from "./page.module.css";
 
-interface CartItem { item: string; quantity: number; price: number; totalPrice: number; }
+interface CartItem { menuItemId: string; item: string; quantity: number; price: number; totalPrice: number; }
 
 export default function CartPage() {
   const [cart, setCart] = useState<CartItem[]>([]);
@@ -37,9 +37,9 @@ export default function CartPage() {
     }
   };
 
-  const handleRemove = async (itemName: string) => {
+  const handleRemove = async (menuItemId: string) => {
     try {
-      const data = await removeFromCart(itemName);
+      const data = await removeFromCart(menuItemId);
       setCart(data.cart);
       setGrandTotal(data.grandTotal ?? data.cart.reduce((s: number, i: CartItem) => s + i.totalPrice, 0));
     } catch {
@@ -50,11 +50,11 @@ export default function CartPage() {
   const handleQtyChange = async (item: CartItem, delta: number) => {
     const newQty = item.quantity + delta;
     if (newQty <= 0) {
-      handleRemove(item.item);
+      handleRemove(item.menuItemId);
       return;
     }
     try {
-      const data = await updateCartItem(item.item, newQty, item.price);
+      const data = await updateCartItem(item.menuItemId, newQty);
       setCart(data.cart);
       setGrandTotal(data.grandTotal);
     } catch {
@@ -107,7 +107,7 @@ export default function CartPage() {
                 {/* Cart Items */}
                 <div className={styles.cartItems}>
                   {cart.map((item) => (
-                    <div key={item.item} className={styles.cartCard}>
+                    <div key={item.menuItemId} className={styles.cartCard}>
                       <div className={styles.itemInfo}>
                         <h3 className={styles.itemName}>{item.item}</h3>
                         <p className={styles.itemPrice}>₹{item.price} each</p>
@@ -135,7 +135,7 @@ export default function CartPage() {
                         </span>
 
                         <button
-                          onClick={() => handleRemove(item.item)}
+                          onClick={() => handleRemove(item.menuItemId)}
                           className={styles.removeBtn}
                           title="Remove item"
                         >
@@ -153,7 +153,7 @@ export default function CartPage() {
 
                     <div className={styles.summaryRows}>
                       {cart.map((item) => (
-                        <div key={item.item} className={styles.summaryRow}>
+                        <div key={item.menuItemId} className={styles.summaryRow}>
                           <span>
                             {item.item} ×{item.quantity}
                           </span>

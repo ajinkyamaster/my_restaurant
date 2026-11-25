@@ -1,64 +1,58 @@
-const BASE = (process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000").replace(/\/+$/, "");
-const ADMIN_API = `${BASE}/api/admin`;
+import { request } from "./http";
 
-async function request(endpoint, options = {}) {
-  const { headers, ...rest } = options;
-  const res = await fetch(`${ADMIN_API}${endpoint}`, {
-    credentials: "include",
-    ...rest,
-    headers: { "Content-Type": "application/json", ...headers },
+const ADMIN_API = "/api/admin";
+
+const get = (endpoint: string) => request(ADMIN_API, endpoint);
+
+const post = (endpoint: string, data?: unknown) =>
+  request(ADMIN_API, endpoint, {
+    method: "POST",
+    body: data === undefined ? undefined : JSON.stringify(data),
   });
 
-  if (!res.ok) {
-    const body = await res.json().catch(() => ({}));
-    throw new Error(body.error || `Request failed (${res.status})`);
-  }
-
-  return res.json();
-}
-
-function post(endpoint, data) {
-  return request(endpoint, { method: "POST", body: JSON.stringify(data) });
-}
-
 // Auth
-export const adminLogin = (username, password) =>
+export const adminLogin = (username: string, password: string) =>
   post("/login", { username, password });
 export const adminLogout = () => post("/logout");
-export const fetchAdminSession = () => request("/session");
+export const fetchAdminSession = () => get("/session");
 
 // Dashboard
-export const fetchDashboard = () => request("/dashboard");
+export const fetchDashboard = () => get("/dashboard");
 
 // Menu
-export const fetchAdminMenu = () => request("/menu");
-export const addMenuItem = (name, price) => post("/menu", { name, price });
-export const updateMenuItem = (id, name, price) =>
+export const fetchAdminMenu = () => get("/menu");
+export const addMenuItem = (name: string, price: number) =>
+  post("/menu", { name, price });
+export const updateMenuItem = (id: string, name: string, price: number) =>
   post("/menu/update", { id, name, price });
-export const deleteMenuItem = (id) => post("/menu/delete", { id });
+export const deleteMenuItem = (id: string) => post("/menu/delete", { id });
 
 // Tables
-export const fetchAdminTables = () => request("/tables");
-export const addTable = (tableNumber, capacity) =>
+export const fetchAdminTables = () => get("/tables");
+export const addTable = (tableNumber: number, capacity: number) =>
   post("/tables", { tableNumber, capacity });
-export const updateTable = (id, tableNumber, capacity, isVacant) =>
-  post("/tables/update", { id, tableNumber, capacity, isVacant });
-export const deleteTable = (id) => post("/tables/delete", { id });
+export const updateTable = (
+  id: string,
+  tableNumber: number,
+  capacity: number,
+  isVacant: boolean
+) => post("/tables/update", { id, tableNumber, capacity, isVacant });
+export const deleteTable = (id: string) => post("/tables/delete", { id });
 
 // Bookings
-export const fetchAdminBookings = () => request("/bookings");
+export const fetchAdminBookings = () => get("/bookings");
 
 // Managers
-export const fetchManagers = () => request("/managers");
-export const createManager = (username, password) =>
+export const fetchManagers = () => get("/managers");
+export const createManager = (username: string, password: string) =>
   post("/managers/create", { username, password });
-export const vacateManager = (username) =>
+export const vacateManager = (username: string) =>
   post("/managers/vacate", { username });
-export const createAdmin = (username, password) =>
+export const createAdmin = (username: string, password: string) =>
   post("/admins/create", { username, password });
 
 // Reset
 export const endOfDayReset = () => post("/reset");
 
 // AI Analysis
-export const fetchAiAnalysis = () => request("/ai-analysis");
+export const fetchAiAnalysis = () => get("/ai-analysis");

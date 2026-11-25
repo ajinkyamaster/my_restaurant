@@ -1,43 +1,49 @@
 const bookingsModel = require("../../models/bookings");
 const tablesModel = require("../../models/tables");
-const { createTableSession } = require("../../session/session-config");
+const { startTableSession } = require("../../services/tableSession");
+const validate = require("../../utils/validate");
+const { ConflictError } = require("../../utils/errors");
 
-// ─── API: GET /api/tables ─── Returns all tables with vacancy info
 async function apiGetTables(req, res) {
-    try {
-        const tables = await tablesModel.getAllTables();
-        res.json(tables);
-    } catch (err) {
-        console.error("API: Failed to fetch tables", err);
-        res.status(500).json({ error: "Failed to load tables" });
-    }
+    const tables = await tablesModel.getAllTables();
+    res.json(tables);
 }
 
-// ─── API: POST /api/bookTable ─── Book a table (JSON)
+/**
+ * Book a table.
+ *
+ * The table is claimed with one atomic conditional update, so two people
+ * scanning/entering the same table number at the same moment cannot both win.
+ */
 async function apiBookTable(req, res) {
-    try {
-        const { name, tableNumber } = req.body;
-        const desiredTable = await tablesModel.getTableByTableNumber(parseInt(tableNumber));
+    const name = validate.str(req.body && req.body.name, { field: "name", min: 1, max: 60 });
+    const tableNumber = validate.int(req.body && req.body.tableNumber, {
+        field: "tableNumber",
+        min: 1,
+        max: 9999
+    });
 
-        if (!desiredTable) {
-            return res.status(400).json({ error: `Table ${tableNumber} is already occupied or does not exist.` });
-        }
-
-        const bookingData = {
-            customerName: name,
-            tableNumber: desiredTable.tableNumber,
-            bookingTime: new Date(),
-        };
-
-        await bookingsModel.createBooking(bookingData);
-        await tablesModel.markTableOccupied(desiredTable._id);
-        createTableSession(req, desiredTable, name);
-
-        res.json({ success: true, booking: bookingData });
-    } catch (err) {
-        console.error("API: Booking failed", err);
-        res.status(500).json({ error: "Booking failed" });
+    const table = await tablesModel.claimVacantTable(tableNumber);
+    if (!table) {
+        throw new ConflictError(`Table ${tableNumber} is not available`);
     }
+
+    const bookingData = {
+        customerName: name,
+        tableNumber: table.tableNumber,
+        bookingTime: new Date()
+    };
+
+    try {
+        await bookingsModel.createBooking(bookingData);
+        await startTableSession(res, table, name);
+    } catch (error) {
+        // Never leave a table occupied by a booking that failed halfway.
+        await tablesModel.releaseTable(table._id).catch(() => {});
+        throw error;
+    }
+
+    res.json({ success: true, booking: bookingData });
 }
 
 module.exports = {

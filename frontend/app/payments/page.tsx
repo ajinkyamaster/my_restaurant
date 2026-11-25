@@ -13,7 +13,7 @@ import {
 } from "@/utils/api";
 import styles from "./page.module.css";
 
-interface CartItem { item: string; quantity: number; price: number; totalPrice: number; }
+interface CartItem { menuItemId: string; item: string; quantity: number; price: number; totalPrice: number; }
 interface OrderItem { item: string; quantity: number; price: number; totalPrice: number; }
 interface Order { _id: string; tableNumber: number; customer: { name: string }; items: OrderItem[]; grandTotal: number; orderedAt: string; status: string; }
 
@@ -135,7 +135,7 @@ export default function PaymentsPage() {
 
                     <div className={styles.checkoutItems}>
                       {cart.map((item) => (
-                        <div key={item.item} className={styles.checkoutRow}>
+                        <div key={item.menuItemId} className={styles.checkoutRow}>
                           <span>
                             {item.item}{" "}
                             <span className={styles.qty}>×{item.quantity}</span>

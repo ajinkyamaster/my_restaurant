@@ -45,7 +45,7 @@ The frontend was **migrated from server-rendered EJS templates to a Next.js (Rea
 | **Backend** | Node.js, Express.js, MongoDB (Mongoose-free, native driver) |
 | **AI/ML** | Python, FastAPI, Linear Regression, Random Forest |
 | **Deployment** | Render (frontend + backend as separate services) |
-| **Auth** | Session-based (express-session + connect-mongo) |
+| **Auth** | JWT access tokens (15 min) + rotating refresh tokens (7 days), httpOnly cookies |
 
 ---
 
@@ -115,7 +115,11 @@ my_restaurant/
 │   ├── admin/api.js          # /api/admin/* routes
 │   └── manager/api.js        # /api/manager/* routes
 ├── models/                   # MongoDB data access (unchanged)
-├── session/                  # Session config (cross-site cookie support)
+├── auth/                     # JWT signing, refresh-token rotation, CSRF
+├── middleware/               # Auth guards (role + account re-validation)
+├── services/                 # Table-session helpers
+├── config/                   # CORS / origin allowlist
+├── utils/                    # Validation and typed errors
 ├── frontend/                 # Next.js app
 │   ├── app/                  # Pages (customer, admin, manager)
 │   ├── components/           # Reusable UI components
@@ -144,12 +148,25 @@ pip install -r requirements.txt
 uvicorn app:app --port 8000
 ```
 
-Create a `.env` in root:
+Create a `.env` in root (see `.env.example`):
 ```
 MONGO_URI=your_mongodb_uri
 DB_NAME=my_restro
-SESSION_SECRET=your_secret
+JWT_SECRET=<at least 32 random characters>
 ```
+
+Generate a signing secret with:
+```bash
+node -e "console.log(require('crypto').randomBytes(48).toString('hex'))"
+```
+
+Auth model: a 15-minute JWT access token plus an opaque 7-day refresh token, both in
+httpOnly cookies. Refresh tokens are stored hashed in MongoDB, rotated on every use, and
+revoked as a family if a used token is replayed. Staff tokens are re-validated against the
+account on every request, so deleting a manager revokes access immediately.
+
+State-changing requests must send `X-CSRF-Token` with the value returned by any API
+response (or `GET /api/csrf`); the browser cookie alone is not enough.
 
 ---
 
@@ -167,7 +184,9 @@ Two separate Render Web Services from the same GitHub repo:
 | Service | Key | Value |
 |---------|-----|-------|
 | Backend | `NODE_ENV` | `production` |
+| Backend | `JWT_SECRET` | 48+ random characters (never reuse the old `SESSION_SECRET`) |
 | Backend | `FRONTEND_URL` | `https://your-frontend.onrender.com` |
+| Backend | `AI_SERVICE_URL` | `https://your-ai-service.onrender.com` (optional) |
 | Frontend | `NEXT_PUBLIC_API_URL` | `https://your-backend.onrender.com` |
 
 ---
